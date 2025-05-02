@@ -1,10 +1,3 @@
-//
-//  XPView.swift
-//  a3-fitness-app
-//
-//  Created by Daniel Dissington on 2/5/2025.
-//
-
 import SwiftUI
 
 struct XPView: View {
@@ -25,7 +18,7 @@ struct XPView: View {
                         .fill(Color.green)
                         .frame(width: (width * 0.8) * CGFloat(level.progress), height: height * 0.05)
                 }
-                .offset(x: width * 0.2)
+                    .offset(x: width * 0.2)
                 
                 Text(String(level.level))
                     .font(.system(size: size * 0.12, weight: .bold))

@@ -3,7 +3,7 @@ import Combine
 
 struct NewUserView: View {
     @Binding var user: User
-    @Binding var userInvalid: Bool
+    @Binding var isNewUser: Bool
     
     var body: some View {
         GeometryReader { geometry in
@@ -46,7 +46,7 @@ struct NewUserView: View {
                     Spacer()
                     
                     Button("Save") {
-                        userInvalid = false
+                        isNewUser = false
                     }
                         .disabled(user.name.isEmpty)
                         .font(.title)
@@ -61,9 +61,9 @@ struct NewUserView: View {
 
 struct NewUserView_Previews: PreviewProvider {
     @State static var user = User(name: "", level: Level(level: 1, xp: 0))
-    @State static var userInvalid = true
+    @State static var isNewUser = true
     
     static var previews: some View {
-        NewUserView(user: $user, userInvalid: $userInvalid)
+        NewUserView(user: $user, isNewUser: $isNewUser)
     }
 }

@@ -3,7 +3,7 @@ import SwiftUI
 struct MainView: View {
     
     @State private var user: User = User(name: "", level: Level(level: 1, xp: 0))
-    @State private var userInvalid: Bool = false
+    @State private var isNewUser: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -25,7 +25,6 @@ struct MainView: View {
                         .padding()
                         .font(.largeTitle)
                         .multilineTextAlignment(.center)
-                        
                     
                     Spacer()
                 }
@@ -34,16 +33,14 @@ struct MainView: View {
         
         .onAppear {
             if user.name.isEmpty {
-                userInvalid = true
+                isNewUser = true
             }
         }
         
-        .sheet(isPresented: $userInvalid) {
-            NewUserView(user: $user, userInvalid: $userInvalid)
+        .sheet(isPresented: $isNewUser) {
+            NewUserView(user: $user, isNewUser: $isNewUser)
                 .interactiveDismissDisabled()
         }
-        
-        
     }
 }
 
