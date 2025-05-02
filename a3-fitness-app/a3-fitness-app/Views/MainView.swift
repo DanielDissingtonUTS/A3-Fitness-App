@@ -11,11 +11,13 @@ struct MainView: View {
                     .fill(Color.background)
                     .ignoresSafeArea()
                 VStack {
-                    HStack {
-                        AvatarView(level: 1)
-                    }
+                    let avatarSize: CGFloat = width * 0.45
+                    
+                    AvatarView(level: 1, progress: 0.8)
+                        .frame(width: avatarSize, height: avatarSize)
+
+                    Spacer()                    
                 }
-                .padding()
             }
         }
     }

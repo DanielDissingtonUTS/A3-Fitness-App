@@ -1,24 +1,34 @@
 import SwiftUI
 
 struct AvatarView: View {
-    var level: Int = 1
+    var level: Int
+    var progress: Float
     
     var body: some View {
-        GeometryReader { geometry in
-            let width: CGFloat = geometry.size.width
-            
-            ZStack {
+        ZStack {
+            GeometryReader { geometry in
+                let width = geometry.size.width
+                let height = geometry.size.height
+                
+                Circle()
+                    .fill(Color.yellow)
+                    .frame(width: width, height: height)
+                
                 Image("AvatarPlaceholder")
                     .resizable()
-                    .background(Color.yellow)
                     .aspectRatio(contentMode: .fill)
                     .clipShape(Circle())
-                    .frame(width: width * 0.2, height: width * 0.2)
+                    .frame(width: width, height: height)
+
+                XPView(level: level, progress: progress)
+                    .frame(width: width, height: height * 2)
+                    .position(x: width / 2, y: height * 1)
             }
         }
     }
 }
 
 #Preview {
-    AvatarView()
+    AvatarView(level: 1, progress: 0.5)
+        .frame(width: 300, height: 300)
 }
