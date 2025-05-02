@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct XPView: View {
-    let level: Int
-    let progress: Float
+    let level: Level
     
     var body: some View {
         GeometryReader { geometry in
@@ -24,11 +23,11 @@ struct XPView: View {
                         .frame(width: width * 0.8, height: height * 0.1)
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color.green)
-                        .frame(width: (width * 0.8) * CGFloat(progress), height: height * 0.05)
+                        .frame(width: (width * 0.8) * CGFloat(level.progress), height: height * 0.05)
                 }
                 .offset(x: width * 0.2)
                 
-                Text(String(level))
+                Text(String(level.level))
                     .font(.system(size: size * 0.12, weight: .bold))
                     .frame(width: width * 0.2, height: height * 0.1)
                     .background(Color.gray)
@@ -39,5 +38,5 @@ struct XPView: View {
 }
 
 #Preview {
-    XPView(level: 1, progress: 0.5)
+    XPView(level: Level(level: 1, xp: 50))
 }

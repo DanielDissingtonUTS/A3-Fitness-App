@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct AvatarView: View {
-    var level: Int
-    var progress: Float
+    var user: User
     
     var body: some View {
         ZStack {
@@ -20,7 +19,7 @@ struct AvatarView: View {
                     .clipShape(Circle())
                     .frame(width: width, height: height)
 
-                XPView(level: level, progress: progress)
+                XPView(level: user.level)
                     .frame(width: width, height: height * 2)
                     .position(x: width / 2, y: height * 1)
             }
@@ -29,6 +28,6 @@ struct AvatarView: View {
 }
 
 #Preview {
-    AvatarView(level: 1, progress: 0.5)
+    AvatarView(user: User(name: "", level: Level(level: 1, xp: 50)))
         .frame(width: 300, height: 300)
 }

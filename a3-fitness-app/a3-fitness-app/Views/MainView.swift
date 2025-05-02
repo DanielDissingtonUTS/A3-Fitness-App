@@ -1,6 +1,10 @@
 import SwiftUI
 
 struct MainView: View {
+    
+    @State private var user: User = User(name: "", level: Level(level: 1, xp: 0))
+    @State private var userInvalid: Bool = false
+    
     var body: some View {
         GeometryReader { geometry in
             let width: CGFloat = geometry.size.width
@@ -13,13 +17,33 @@ struct MainView: View {
                 VStack {
                     let avatarSize: CGFloat = width * 0.45
                     
-                    AvatarView(level: 1, progress: 0.8)
+                    AvatarView(user: user)
                         .frame(width: avatarSize, height: avatarSize)
-
-                    Spacer()                    
+                    
+                    Text("Welcome back,\n\(user.name)")
+                        .padding()
+                        .padding()
+                        .font(.largeTitle)
+                        .multilineTextAlignment(.center)
+                        
+                    
+                    Spacer()
                 }
             }
         }
+        
+        .onAppear {
+            if user.name.isEmpty {
+                userInvalid = true
+            }
+        }
+        
+        .sheet(isPresented: $userInvalid) {
+            NewUserView(user: $user, userInvalid: $userInvalid)
+                .interactiveDismissDisabled()
+        }
+        
+        
     }
 }
 
