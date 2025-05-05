@@ -60,7 +60,7 @@ struct MainView: View {
         }
         
         .sheet(isPresented: $isNewUser) {
-            NewUserView(isNewUser: $isNewUser)
+            NewUserView(userManager: userManager, isNewUser: $isNewUser)
                 .interactiveDismissDisabled()
         }
     }

@@ -2,7 +2,7 @@ import SwiftUI
 import Combine
 
 struct NewUserView: View {
-    @StateObject private var userManager = UserManager()
+    @StateObject var userManager: UserManager
     @Binding var isNewUser: Bool
     
     var body: some View {
@@ -60,8 +60,8 @@ struct NewUserView: View {
         }
     }
 }
-
-#Preview {
-    NewUserView(isNewUser: Binding.constant(true))
-}
+//
+//#Preview {
+//    NewUserView(isNewUser: Binding.constant(true))
+//}
 
