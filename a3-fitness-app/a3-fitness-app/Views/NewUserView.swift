@@ -2,13 +2,14 @@ import SwiftUI
 import Combine
 
 struct NewUserView: View {
-    @Binding var user: User
+    @StateObject private var userManager = UserManager()
     @Binding var isNewUser: Bool
     
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
             let height = geometry.size.height
+            let size = min(width, height)
             
             ZStack {
                 Rectangle()
@@ -21,15 +22,14 @@ struct NewUserView: View {
                     Image("Logo")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: width * 0.8, height: width * 0.8)
+                        .frame(width: size * 0.8, height: size * 0.8)
                     
                     Text("Enter your name:")
                         .font(.title)
                     
-                    TextField("", text: $user.name)
+                    TextField("", text: $userManager.user.name)
                         .multilineTextAlignment(.center)
-                        .padding()
-                        .font(.title2)
+                        .font(.largeTitle)
                         .background (
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.gray, lineWidth: 1)
@@ -37,18 +37,20 @@ struct NewUserView: View {
                         .padding(.horizontal)
                         .padding(.bottom)
                         .frame(maxWidth: width * 0.8)
-                        .onReceive(Just(user.name)) { char in
-                            if char.count > 20 {
-                                user.name = String(char.prefix(20))
+                        .onReceive(Just(userManager.user.name)) { char in
+                            if char.count > 20 { // This works when a real User object is fed in
+                                userManager.user.name = String(char.prefix(20))
                             }
                         }
                     
                     Spacer()
                     
                     Button("Save") {
+                        userManager.createUser(name: userManager.user.name, level: Level(level: 1, xp: 0))
+                        print(userManager.user.name)
                         isNewUser = false
                     }
-                        .disabled(user.name.isEmpty)
+                    .disabled(userManager.user.name.isEmpty)
                         .font(.title)
                         .buttonStyle(.borderedProminent)
                     
@@ -59,11 +61,7 @@ struct NewUserView: View {
     }
 }
 
-struct NewUserView_Previews: PreviewProvider {
-    @State static var user = User(name: "", level: Level(level: 1, xp: 0))
-    @State static var isNewUser = true
-    
-    static var previews: some View {
-        NewUserView(user: $user, isNewUser: $isNewUser)
-    }
+#Preview {
+    NewUserView(isNewUser: Binding.constant(true))
 }
+

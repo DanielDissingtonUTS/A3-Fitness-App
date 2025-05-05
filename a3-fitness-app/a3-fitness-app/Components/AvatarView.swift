@@ -8,20 +8,21 @@ struct AvatarView: View {
             GeometryReader { geometry in
                 let width = geometry.size.width
                 let height = geometry.size.height
+                let size = min(width, height)
                 
                 Circle()
                     .fill(Color.yellow)
-                    .frame(width: width, height: height)
+                    .frame(width: size, height: size)
                 
                 Image("AvatarPlaceholder")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .clipShape(Circle())
-                    .frame(width: width, height: height)
+                    .frame(width: size, height: size)
 
                 XPView(level: user.level)
                     .frame(width: width, height: height * 2)
-                    .position(x: width / 2, y: height * 1)
+                    .position(x: width / 2, y: height)
             }
         }
     }

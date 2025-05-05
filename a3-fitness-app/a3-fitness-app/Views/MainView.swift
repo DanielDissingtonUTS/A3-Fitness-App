@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct MainView: View {
-    
-    @State private var user: User = User(name: "", level: Level(level: 1, xp: 0))
+    @StateObject private var userManager = UserManager()
     @State private var isNewUser: Bool = false
+    @State private var exercises: [Exercise] = []
     
     var body: some View {
         GeometryReader { geometry in
@@ -16,15 +16,29 @@ struct MainView: View {
                     .ignoresSafeArea()
                 VStack {
                     let avatarSize: CGFloat = width * 0.45
-                    
-                    AvatarView(user: user)
+                        
+                    AvatarView(user: userManager.user)
                         .frame(width: avatarSize, height: avatarSize)
                     
-                    Text("Welcome back,\n\(user.name)")
-                        .padding()
-                        .padding()
-                        .font(.largeTitle)
-                        .multilineTextAlignment(.center)
+                    HStack {
+                        Text(userManager.user.name)
+                            .font(.title)
+                            .multilineTextAlignment(.center)
+                        Button("Delete") {
+                            userManager.deleteUser()
+                            isNewUser = userManager.user.name.isEmpty
+                        }
+                            .buttonStyle(.borderedProminent)
+                    }
+                    .padding(.top, height * 0.075)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.blue)
+                    
+                    ForEach(exercises, id: \.self) { exercise in
+                        Text(exercise.name)
+                    }
                     
                     Spacer()
                 }
@@ -32,13 +46,21 @@ struct MainView: View {
         }
         
         .onAppear {
-            if user.name.isEmpty {
-                isNewUser = true
+            Task {
+                do {
+                    exercises = try await fetchExercises(limit: 5)
+                } catch {
+                    print("Error: \(error)")
+                }
             }
+            
+            userManager.readUser()
+            
+            isNewUser = userManager.user.name.isEmpty
         }
         
         .sheet(isPresented: $isNewUser) {
-            NewUserView(user: $user, isNewUser: $isNewUser)
+            NewUserView(isNewUser: $isNewUser)
                 .interactiveDismissDisabled()
         }
     }

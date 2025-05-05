@@ -1,4 +1,4 @@
-struct Level {
+struct Level: Codable {
     var level: Int
     var xp: Int
     var progress: Float {
