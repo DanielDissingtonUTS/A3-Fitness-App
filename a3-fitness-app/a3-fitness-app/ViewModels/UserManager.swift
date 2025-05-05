@@ -7,12 +7,10 @@ class UserManager: ObservableObject {
     private let url = URL.documentsDirectory.appending(path: "user.json")
     
     func createUser(name: String, level: Level) { // CREATE
-        let newUser = User(name: name, level: level)
-        
-        self.user = newUser
+        self.user = User(name: name, level: level)
         
         do {
-            try JSONEncoder().encode(newUser).write(to: url)
+            try JSONEncoder().encode(self.user).write(to: url)
             
         } catch {
             print(error.localizedDescription)
