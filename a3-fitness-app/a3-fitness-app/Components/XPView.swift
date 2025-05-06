@@ -10,7 +10,7 @@ struct XPView: View {
             let size = min(width, height)
             
             ZStack(alignment: .leading) {
-                ZStack(alignment: .leading) {
+                ZStack(alignment: .leading) { // XP Bar
                     Rectangle()
                         .fill(Color.gray)
                         .frame(width: width * 0.8, height: height * 0.1)
@@ -23,13 +23,12 @@ struct XPView: View {
                 }
                     .offset(x: width * 0.2)
                 
-                Text(String(level.level))
+                Text(String(level.level)) // Level Count
                     .font(.system(size: size * 0.12, weight: .bold))
                     .frame(width: width * 0.2, height: height * 0.1)
                     .background(Color.gray)
                     
-                
-                Text(String("\(level.xp) / \(level.level * 100) XP"))
+                Text(String("\(level.xp) / \(level.level * 100) XP")) // XP Count
                     .font(.system(size: size * 0.12, weight: .bold))
                     .frame(width: width, height: height * 0.1)
                     .foregroundColor(.white)

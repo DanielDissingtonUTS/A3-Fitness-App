@@ -60,8 +60,8 @@ struct NewUserView: View {
         }
     }
 }
-//
-//#Preview {
-//    NewUserView(isNewUser: Binding.constant(true))
-//}
+
+#Preview {
+    NewUserView(userManager: UserManager(), isNewUser: Binding.constant(true))
+}
 

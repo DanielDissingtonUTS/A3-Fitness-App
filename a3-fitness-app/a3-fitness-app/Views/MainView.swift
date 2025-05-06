@@ -14,6 +14,7 @@ struct MainView: View {
                 Rectangle()
                     .fill(Color.background)
                     .ignoresSafeArea()
+                
                 VStack {
                     let avatarSize: CGFloat = width * 0.45
                         
