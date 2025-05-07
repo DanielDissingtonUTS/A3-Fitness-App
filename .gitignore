@@ -1,0 +1,85 @@
+
+# === Swift/Xcode GitIgnore ===
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+
+# Xcode playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Derived data & build artifacts
+DerivedData/
+build/
+*.hmap
+*.ipa
+*.app.dSYM
+*.dSYM
+*.dSYM.zip
+*.xcarchive
+
+# SwiftPM
+.build/
+Package.resolved
+Package.pins
+.swiftpm/xcode/package.xcworkspace/
+.swiftpm
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+Carthage/Checkouts/
+
+# Fastlane
+fastlane/report.xml
+fastlane/screenshots/**/*.png
+fastlane/test_output
+fastlane/Preview.html
+
+# SwiftLint
+.swiftlint.yml
+
+# Env files
+.env
+*.env
+
+# Temporary files
+*.swp
+*.tmp
+*.log
+
+# Personal settings (optional)
+*.orig
+*.rej
+*.bak
+
+# Other IDEs
+.idea/
+*.iml
+
+# XCFrameworks
+*.xcframework
+
+# Archive outputs
+*.xcworkspace/xcshareddata/
+*.xcuserstate
+*.xcuserdatad
+
+# Optional: exclude test results
+*.xctest
+
+# === End Swift/Xcode GitIgnore ===
+
