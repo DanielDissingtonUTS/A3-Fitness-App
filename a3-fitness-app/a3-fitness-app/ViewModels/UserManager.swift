@@ -1,51 +1,62 @@
+// UserManager.swift
+
 import Foundation
 
 class UserManager: ObservableObject {
-    
-    @Published var user: User = User(name: "", level: Level(level: 1, xp: 0))
-    
+
+    @Published var user: User = User(name: "",
+                                      level: Level(level: 1, xp: 0))
+
     private let url = URL.documentsDirectory.appending(path: "user.json")
-    
-    func createUser(name: String, level: Level) { // CREATE
-        self.user = User(name: name, level: level)
-        
+
+    // CREATE
+    func createUser(name: String, level: Level) {
+        user = User(name: name, level: level)
+        saveUser()
+    }
+
+    // READ
+    func readUser() {
         do {
-            try JSONEncoder().encode(self.user).write(to: url)
-            
+            user = try JSONDecoder()
+                .decode(User.self, from: Data(contentsOf: url))
         } catch {
-            print(error.localizedDescription)
+            print("Error reading user:", error.localizedDescription)
         }
     }
-    
-    func readUser() { // READ
-        do {
-            self.user = try JSONDecoder().decode(User.self, from: Data(contentsOf: url))
-        } catch {
-            print(error.localizedDescription)
-        }
+
+    // UPDATE
+    func updateUser(name: String,
+                    level: Level,
+                    workouts: [Workout]?) {
+        user = User(name: name,
+                    level: level,
+                    workouts: workouts)
+        saveUser()
     }
-    
-    func updateUser(name: String, level: Level, workouts: [Workout]?) { // UPDATE
-        self.user = User(name: name, level: level, workouts: workouts)
-            
+
+    // DELETE
+    func deleteUser() {
         do {
-            try JSONEncoder().encode(self.user).write(to: url, options: [.atomic])
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func deleteUser() { // DELETE
-        do {
-            let fileManager = FileManager.default
-            
-            if fileManager.fileExists(atPath: url.path) {
-                try fileManager.removeItem(at: url)
-                self.user = User(name: "", level: Level(level: 1, xp: 0))
+            let fm = FileManager.default
+            if fm.fileExists(atPath: url.path) {
+                try fm.removeItem(at: url)
+                user = User(name: "",
+                            level: Level(level: 1, xp: 0))
             }
         } catch {
-            print(error.localizedDescription)
+            print("Error deleting user:", error.localizedDescription)
+        }
+    }
+
+    // SAVE
+    func saveUser() {
+        do {
+            try JSONEncoder()
+                .encode(user)
+                .write(to: url, options: [.atomic])
+        } catch {
+            print("Error saving user:", error.localizedDescription)
         }
     }
 }

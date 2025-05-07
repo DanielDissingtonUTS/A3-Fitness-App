@@ -5,4 +5,5 @@ struct User: Identifiable, Codable {
     var name: String
     var level: Level
     var workouts: [Workout]?
+    var goals: [String] = []      // ← default empty, will be set in UserGoalsView
 }
