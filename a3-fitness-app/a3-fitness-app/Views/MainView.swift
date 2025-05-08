@@ -4,102 +4,110 @@ struct MainView: View {
     @StateObject private var userManager   = UserManager()
     @State private var isNewUser           = false
     @State private var isSettingGoals      = false
-    @State private var exercises: [Exercise] = []
 
     var body: some View {
         NavigationStack {
-            GeometryReader { geo in
-                ZStack {
-                    Color.background
-                        .ignoresSafeArea()
+            VStack(spacing: 20) {
+                // 1) Avatar + XP
+                AvatarView(user: userManager.user)
+                  // width = 45% of screen, height = 1.15× width + spacing (≈ circle + xp)
+                    .frame(
+                        width: UIScreen.main.bounds.width * 0.45,
+                        height: (UIScreen.main.bounds.width * 0.45) * 1.15 + 12
+                    )
 
-                    VStack {
-                        AvatarView(user: userManager.user)
-                            .frame(width: geo.size.width * 0.45,
-                                   height: geo.size.width * 0.45)
+                // 2) Username + delete
+                HStack {
+                    Text(userManager.user.name)
+                        .font(.title2)
+                        .bold()
+                    Button("Delete") {
+                        userManager.deleteUser()
+                        isNewUser = true
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
 
-                        HStack {
-                            Text(userManager.user.name)
-                                .font(.title)
-                                .multilineTextAlignment(.center)
-                            Button("Delete") {
-                                userManager.deleteUser()
-                                isNewUser = true
-                            }
-                            .buttonStyle(.borderedProminent)
+                Divider()
+
+                // 3) “Your Exercises” header
+                Text("Your Exercises")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+
+                // 4) List of saved exercises, scrollable, min 200pt tall
+                List {
+                    if userManager.user.exercisePool.isEmpty {
+                        Text("No saved exercises yet.")
+                            .italic()
+                            .foregroundColor(.secondary)
+                    } else {
+                        ForEach(userManager.user.exercisePool) { ex in
+                            Text(ex.name)
                         }
-                        .padding(.top, 20)
-
-                        Divider()
-
-                        ForEach(exercises, id: \.self) { ex in
-                            Text(ex.name.capitalized)
-                        }
-
-                        Spacer()
+                        .onDelete(perform: deleteFromPool)
                     }
                 }
+                .listStyle(.insetGrouped)
+                .frame(minHeight: 200)
+
+                Spacer()
+
+                // 5) Manage Exercises button further down
+                NavigationLink {
+                    ExerciseListView(userManager: userManager)
+                } label: {
+                    Label("Manage Exercises", systemImage: "list.bullet")
+                        .font(.headline)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.accentColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .padding(.horizontal)
+            }
+            .padding()
+            .navigationTitle("Welcome")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    // debug: reopen registration
+                    Button {
+                        isNewUser = true
+                    } label: {
+                        Image(systemName: "person.crop.circle.badge.plus")
+                    }
+                }
+            }
+            // 6) Registration flow
+            .fullScreenCover(isPresented: $isNewUser) {
+                NewUserView(userManager: userManager,
+                            isNewUser:   $isNewUser)
+                    .interactiveDismissDisabled()
+            }
+            .onChange(of: isNewUser) { newVal in
+                // after sign-up, if no goals, show goals sheet
+                if !newVal && userManager.user.goals.isEmpty {
+                    isSettingGoals = true
+                }
+            }
+            .sheet(isPresented: $isSettingGoals) {
+                UserGoalsView(userManager:    userManager,
+                              isSettingGoals: $isSettingGoals)
+                    .interactiveDismissDisabled()
             }
             .onAppear {
-                // 1) Load (or create) the user
+                // initial load
                 userManager.readUser()
                 isNewUser = userManager.user.name.isEmpty
-
-                // 2) Decide if we need to show today’s goals
-                if !userManager.user.name.isEmpty {
-                    if let date = userManager.user.goalsDate,
-                       Calendar.current.isDateInToday(date) {
-                        isSettingGoals = false
-                    } else {
-                        isSettingGoals = true
-                    }
-                }
-
-                // 3) Fetch some sample exercises
-                Task {
-                    do {
-                        exercises = try await fetchExercises(limit: 5)
-                    } catch {
-                        print("Fetch error:", error)
-                    }
-                }
-            }
-            // full-screen welcome / registration
-            .fullScreenCover(isPresented: $isNewUser) {
-                NewUserView(
-                    userManager: userManager,
-                    isNewUser:   $isNewUser
-                )
-                .interactiveDismissDisabled()
-            }
-            // after registration, re-evaluate goals prompt
-            .onChange(of: isNewUser) { _, newVal in
-                if !newVal {
-                    if let date = userManager.user.goalsDate,
-                       Calendar.current.isDateInToday(date) {
-                        isSettingGoals = false
-                    } else {
-                        isSettingGoals = true
-                    }
-                }
-            }
-            // daily goals sheet
-            .sheet(isPresented: $isSettingGoals) {
-                UserGoalsView(
-                    userManager:    userManager,
-                    isSettingGoals: $isSettingGoals
-                )
-                .interactiveDismissDisabled()
-            }
-            
-            Button("🗑️ Clear Goals Date") {
-              var copy = userManager.user
-              copy.goalsDate = nil
-              userManager.user = copy
-              userManager.saveUser()
-              isSettingGoals = true
             }
         }
+    }
+
+    private func deleteFromPool(at offsets: IndexSet) {
+        userManager.user.exercisePool.remove(atOffsets: offsets)
+        userManager.saveUser()
     }
 }
 

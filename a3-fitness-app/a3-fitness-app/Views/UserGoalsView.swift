@@ -2,8 +2,9 @@ import SwiftUI
 
 struct UserGoalsView: View {
     @ObservedObject var userManager: UserManager
-    @Binding       var isSettingGoals: Bool
+    @Binding    var isSettingGoals: Bool
 
+    // Your 10 goal options
     let goalOptions = [
       "Upper Body Strength",
       "Lower Body Strength",
@@ -23,7 +24,7 @@ struct UserGoalsView: View {
         NavigationStack {
             List(goalOptions, id: \.self) { goal in
                 MultipleSelectionRow(
-                    title: goal,
+                    title:      goal,
                     isSelected: selected.contains(goal)
                 ) {
                     if selected.contains(goal) {
@@ -35,20 +36,21 @@ struct UserGoalsView: View {
             }
             .navigationTitle("Pick Your Goals")
             .toolbar {
+                // 1) Clear out yesterday's date so they can re-pick
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("🗑️ Clear Goals Date") {
+                        userManager.user.goalsDate = nil
+                        userManager.saveUser()
+                        // re-present this sheet immediately
+                        isSettingGoals = true
+                    }
+                }
+                // 2) Continue → save goals + today’s date
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Continue") {
-                        // 1) Copy the struct
-                        var copy = userManager.user
-                        copy.goals     = Array(selected)
-                        copy.goalsDate = Date()
-
-                        // 2) Re-assign to the published property
-                        userManager.user = copy
-
-                        // 3) Persist
+                        userManager.user.goals     = Array(selected)
+                        userManager.user.goalsDate = Date()
                         userManager.saveUser()
-
-                        // 4) Dismiss sheet
                         isSettingGoals = false
                     }
                     .disabled(selected.isEmpty)
@@ -58,7 +60,6 @@ struct UserGoalsView: View {
     }
 }
 
-//— Helper row
 struct MultipleSelectionRow: View {
     let title: String
     let isSelected: Bool

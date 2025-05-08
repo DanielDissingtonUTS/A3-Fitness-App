@@ -1,34 +1,48 @@
 import SwiftUI
 
 struct AvatarView: View {
-    var user: User
-    
-    var body: some View {
-        ZStack {
-            GeometryReader { geometry in
-                let width = geometry.size.width
-                let height = geometry.size.height
-                let size = min(width, height)
-                
-                Circle()
-                    .fill(Color.yellow)
-                    .frame(width: size, height: size)
-                
-                Image("AvatarPlaceholder")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .clipShape(Circle())
-                    .frame(width: size, height: size)
+    let user: User
 
-                XPView(level: user.level)
-                    .frame(width: width, height: height * 2)
-                    .position(x: width / 2, y: height)
+    var body: some View {
+        VStack(spacing: 16) {
+            // 1) The round avatar
+            Image("AvatarPlaceholder")
+                .resizable()
+                .scaledToFill()
+                .clipShape(Circle())
+                // pick a diameter we like:
+                .frame(width: 180, height: 180)
+
+            // 2) The XP bar + labels
+            XPView(level: user.level)
+                // make it thicker:
+                .frame(height: 30)
+                .padding(.horizontal, 20)
+
+            // 3) Level & XP text underneath
+            HStack {
+                Text("\(user.level.xp) / \(user.level.level * 100) XP")
+                    .font(.subheadline).bold()
+                Spacer()
+                Text("Lv. \(user.level.level)")
+                    .font(.subheadline).bold()
             }
+            .padding(.horizontal, 40)
         }
     }
 }
 
-#Preview {
-    AvatarView(user: User(name: "", level: Level(level: 1, xp: 50)))
-        .frame(width: 300, height: 300)
+struct AvatarView_Previews: PreviewProvider {
+    static var previews: some View {
+        AvatarView(user: .init(
+            name: "Test",
+            level: Level(level: 3, xp: 65),
+            workouts: nil,
+            goals: [],
+            goalsDate: nil,
+            exercisePool: []
+        ))
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
 }
