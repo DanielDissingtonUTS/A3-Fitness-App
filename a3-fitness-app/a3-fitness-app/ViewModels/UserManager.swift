@@ -26,12 +26,18 @@ class UserManager: ObservableObject {
     }
 
     // UPDATE
-    func updateUser(name: String,
-                    level: Level,
-                    workouts: [Workout]?) {
-        user = User(name: name,
-                    level: level,
-                    workouts: workouts)
+    func updateUser(
+        name: String? = nil,
+        level: Level? = nil,
+        workouts: [Workout]? = nil,
+        theme: Theme? = nil
+    ) {
+        user = User(
+            name: name ?? user.name,
+            level: level ?? user.level,
+            workouts: workouts ?? user.workouts,
+            theme: theme ?? user.theme
+        )
         saveUser()
     }
 

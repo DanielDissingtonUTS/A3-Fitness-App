@@ -69,14 +69,18 @@ struct MainView: View {
                 .padding(.horizontal)
             }
             .padding()
-            .navigationTitle("Welcome")
+            .navigationTitle("Home")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    // debug: reopen registration
-                    Button {
-                        isNewUser = true
-                    } label: {
-                        Image(systemName: "person.crop.circle.badge.plus")
+                    HStack { // debug: reopen registration
+                        Button {
+                            isNewUser = true
+                        } label: {
+                            Image(systemName: "person.crop.circle.badge.plus")
+                        }
+                        NavigationLink(destination: SettingsView(userManager: userManager)) {
+                            Image(systemName: "gearshape")
+                        }
                     }
                 }
             }
