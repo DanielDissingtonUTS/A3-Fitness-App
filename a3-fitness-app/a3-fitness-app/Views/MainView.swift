@@ -91,6 +91,14 @@ struct MainView: View {
                 )
                 .interactiveDismissDisabled()
             }
+            
+            Button("🗑️ Clear Goals Date") {
+              var copy = userManager.user
+              copy.goalsDate = nil
+              userManager.user = copy
+              userManager.saveUser()
+              isSettingGoals = true
+            }
         }
     }
 }
