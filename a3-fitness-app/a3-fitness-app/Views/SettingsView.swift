@@ -88,7 +88,7 @@ struct SettingsView: View {
                         .fontWeight(.bold)
                         .offset(y: size * 0.07)
                 }
-                    .position(x: size * 0.975, y: size - size * 0.975)
+                    .position(x: size * 0.55, y: size * 0.45)
             }
         }
     }
