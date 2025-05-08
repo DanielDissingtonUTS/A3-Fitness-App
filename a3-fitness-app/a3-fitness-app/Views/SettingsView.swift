@@ -13,7 +13,7 @@ struct SettingsView: View {
             let rows = [GridItem(.fixed(size * 0.325))]
             
             Rectangle()
-                .fill(Color("DefaultSecondary"))
+                .fill(Color(userManager.user.theme.secondaryColor))
                 .ignoresSafeArea()
             
             VStack {

@@ -46,7 +46,7 @@ struct NewUserView: View {
                     Spacer()
                     
                     Button("Save") {
-                        userManager.createUser(name: userManager.user.name, level: Level(level: 1, xp: 0))
+                        userManager.createUser(name: userManager.user.name, level: Level(level: 2, xp: 0)) // Changed to lvl 2 for testing
                         print(userManager.user.name)
                         isNewUser = false
                     }
