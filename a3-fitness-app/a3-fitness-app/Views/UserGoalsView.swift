@@ -1,10 +1,9 @@
 import SwiftUI
 
 struct UserGoalsView: View {
-    @StateObject var userManager: UserManager
-    @Binding    var isSettingGoals: Bool
+    @ObservedObject var userManager: UserManager
+    @Binding       var isSettingGoals: Bool
 
-    // Your 10 goal options
     let goalOptions = [
       "Upper Body Strength",
       "Lower Body Strength",
@@ -18,14 +17,13 @@ struct UserGoalsView: View {
       "Specialty Focus"
     ]
 
-    // Use Swift’s Set<String>, not your custom `Set` type
-    @State private var selected: Swift.Set<String> = []
+    @State private var selected: Set<String> = []
 
     var body: some View {
         NavigationStack {
             List(goalOptions, id: \.self) { goal in
                 MultipleSelectionRow(
-                    title:      goal,
+                    title: goal,
                     isSelected: selected.contains(goal)
                 ) {
                     if selected.contains(goal) {
@@ -39,10 +37,18 @@ struct UserGoalsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Continue") {
-                        // Save to user and persist
-                        userManager.user.goals = Array(selected)
+                        // 1) Copy the struct
+                        var copy = userManager.user
+                        copy.goals     = Array(selected)
+                        copy.goalsDate = Date()
+
+                        // 2) Re-assign to the published property
+                        userManager.user = copy
+
+                        // 3) Persist
                         userManager.saveUser()
-                        // Dismiss
+
+                        // 4) Dismiss sheet
                         isSettingGoals = false
                     }
                     .disabled(selected.isEmpty)
@@ -52,6 +58,7 @@ struct UserGoalsView: View {
     }
 }
 
+//— Helper row
 struct MultipleSelectionRow: View {
     let title: String
     let isSelected: Bool
