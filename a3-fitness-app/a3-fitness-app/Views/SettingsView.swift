@@ -85,35 +85,7 @@ struct SettingsView: View {
                         .stroke(Color(userManager.user.theme.primaryColor), lineWidth: size * 0.03)
                         .padding(size * 0.05)
                     )
-<<<<<<< Updated upstream
-
-            } else {
-                Button(action: {
-                    userManager.updateUser(theme: theme)
-                }) {
-                    tile
-                }
-                    .buttonStyle(.plain)
-            }
-        } else {
-            ZStack {
-                tile
-                    .opacity(0.6)
-                ZStack {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: size * 0.4))
-                        .foregroundColor(.yellow)
-                    
-                    Text(String(theme.requiredLevel))
-                        .font(.system(size: size * 0.2))
-                        .fontWeight(.bold)
-                        .offset(y: size * 0.07)
-                }
-                    .position(x: size * 0.55, y: size * 0.45)
-            }
-=======
             )
->>>>>>> Stashed changes
         }
         
         return AnyView (
