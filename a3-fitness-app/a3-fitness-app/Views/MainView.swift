@@ -96,8 +96,7 @@ struct MainView: View {
                 }
             }
             .sheet(isPresented: $isSettingGoals) {
-                UserGoalsView(userManager:    userManager,
-                              isSettingGoals: $isSettingGoals)
+                UserGoalsView(isSettingGoals: $isSettingGoals)
                     .interactiveDismissDisabled()
             }
             .onAppear {

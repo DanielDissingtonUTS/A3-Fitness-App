@@ -17,15 +17,25 @@ struct SettingsView: View {
                 .fill(Color(userManager.user.theme.secondaryColor))
                 .ignoresSafeArea()
             
-            VStack {
-                Text("SettingsView")
-                
-                Spacer()
+            
+            VStack (spacing: height * 0.025) {
+                ZStack {
+                    Rectangle()
+                        .fill(Color(userManager.user.theme.primaryColor))
+                        .ignoresSafeArea()
+                    
+                    Text("Settings")
+                        .foregroundColor(.white)
+                        .font(.system(size: size * 0.075))
+                        .fontWeight(.bold)
+                }
+                    .frame(height: height * 0.1)
                 
                 VStack {
                     Text("Themes")
                         .font(.title)
-                    
+                        .padding(.top)
+
                     ScrollView(.horizontal) {
                         LazyHGrid(rows: rows, spacing: 0) {
                             ForEach(themes, id: \.name) { theme in
@@ -34,21 +44,31 @@ struct SettingsView: View {
                         }
                     }
                 }
-                .background(.white)
+                    .background(.white)
                 
+                VStack {
+                    Text("Goals")
+                        .font(.title)
+                        .padding(.top)
+
+                    ScrollView(.horizontal) {
+                        LazyHGrid(rows: rows, spacing: 0) {
+                            ForEach(userManager.user.goals.indices, id: \.self) { index in
+                                Text(userManager.user.goals[index])
+                            }
+                        }
+                    }
+                }
+                    .background(.white)
+                    
+                    
                 Spacer()
             }
         }
         .onAppear {
-            updateThemes()
-        }
-    }
-        
-    private func updateThemes() {
-        for index in themes.indices {
-            if userManager.user.level.level >= themes[index].requiredLevel {
-                themes[index].unlocked = true
-            }
+            let userLevel = userManager.user.level.level
+            
+            settingsViewModel.unlockThemes(userLevel: userLevel, themes: &themes)
         }
     }
     
@@ -73,7 +93,7 @@ struct SettingsView: View {
                             .fontWeight(.bold)
                             .offset(y: size * 0.1)
                     }
-                    .position(x: size * 0.55, y: size * 0.45)
+                        .position(x: size * 0.55, y: size * 0.45)
                 }
             )
         }
@@ -97,11 +117,10 @@ struct SettingsView: View {
             }
                 .buttonStyle(.plain)
         )
-            
-
     }
 }
 
 #Preview {
     SettingsView()
+        .environmentObject(UserManager.shared)
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct UserGoalsView: View {
-    @ObservedObject var userManager: UserManager
+    @EnvironmentObject var userManager: UserManager
     @Binding    var isSettingGoals: Bool
 
     // Your 10 goal options
@@ -81,9 +81,7 @@ struct MultipleSelectionRow: View {
 
 struct UserGoalsView_Previews: PreviewProvider {
     static var previews: some View {
-        UserGoalsView(
-            userManager:    UserManager(),
-            isSettingGoals: .constant(true)
-        )
+        UserGoalsView(isSettingGoals: .constant(true))
+            .environmentObject(UserManager.shared)
     }
 }
