@@ -51,20 +51,41 @@ struct SettingsView: View {
         }
     }
     
-    @ViewBuilder
     func themeTile(for theme: Theme, size: CGFloat) -> some View {
         let tile = ThemeView(theme: theme)
             .frame(width: size, height: size)
             .padding(size * 0.05)
         
-        if theme.unlocked {
-            if theme == userManager.user.theme {
+        if !theme.unlocked {
+            return AnyView (
+                ZStack {
+                    tile
+                        .opacity(0.6)
+                    
+                    ZStack {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: size * 0.5))
+                            .foregroundColor(.yellow)
+                        
+                        Text(String(theme.requiredLevel))
+                            .font(.system(size: size * 0.3))
+                            .fontWeight(.bold)
+                            .offset(y: size * 0.1)
+                    }
+                    .position(x: size * 0.55, y: size * 0.45)
+                }
+            )
+        }
+        
+        if theme == userManager.user.theme {
+            return AnyView(
                 tile
                     .overlay(
                         RoundedRectangle(cornerRadius: size * 0.1)
-                            .stroke(Color(userManager.user.theme.primaryColor), lineWidth: size * 0.03)
-                            .padding(size * 0.05)
+                        .stroke(Color(userManager.user.theme.primaryColor), lineWidth: size * 0.03)
+                        .padding(size * 0.05)
                     )
+<<<<<<< Updated upstream
 
             } else {
                 Button(action: {
@@ -90,7 +111,21 @@ struct SettingsView: View {
                 }
                     .position(x: size * 0.55, y: size * 0.45)
             }
+=======
+            )
+>>>>>>> Stashed changes
         }
+        
+        return AnyView (
+            Button(action: {
+                userManager.updateUser(theme: theme)
+            }) {
+                tile
+            }
+                .buttonStyle(.plain)
+        )
+            
+
     }
 }
 
