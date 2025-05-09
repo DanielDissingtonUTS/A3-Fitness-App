@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject private var userManager   = UserManager()
-    @State private var isNewUser           = false
-    @State private var isSettingGoals      = false
+    @EnvironmentObject var userManager: UserManager
+    @State private var isNewUser = false
+    @State private var isSettingGoals = false
 
     var body: some View {
         NavigationStack {
@@ -78,7 +78,7 @@ struct MainView: View {
                         } label: {
                             Image(systemName: "person.crop.circle.badge.plus")
                         }
-                        NavigationLink(destination: SettingsView(userManager: userManager)) {
+                        NavigationLink(destination: SettingsView()) {
                             Image(systemName: "gearshape")
                         }
                     }
@@ -86,8 +86,7 @@ struct MainView: View {
             }
             // 6) Registration flow
             .fullScreenCover(isPresented: $isNewUser) {
-                NewUserView(userManager: userManager,
-                            isNewUser:   $isNewUser)
+                NewUserView(isNewUser: $isNewUser)
                     .interactiveDismissDisabled()
             }
             .onChange(of: isNewUser) { newVal in
@@ -118,5 +117,6 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
+            .environmentObject(UserManager.shared)
     }
 }

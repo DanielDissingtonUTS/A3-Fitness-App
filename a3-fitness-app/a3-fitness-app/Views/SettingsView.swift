@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @StateObject var userManager: UserManager
+    @EnvironmentObject var userManager: UserManager
+    @StateObject private var settingsViewModel: SettingsViewModel = SettingsViewModel()
     @State private var themes: [Theme] = Themes.all
 
     var body: some View {
@@ -102,5 +103,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView(userManager: UserManager())
+    SettingsView()
 }

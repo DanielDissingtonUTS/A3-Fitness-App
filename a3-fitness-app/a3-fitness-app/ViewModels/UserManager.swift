@@ -3,6 +3,7 @@
 import Foundation
 
 class UserManager: ObservableObject {
+    static let shared = UserManager()
 
     @Published var user: User = User(name: "",
                                       level: Level(level: 1, xp: 0))

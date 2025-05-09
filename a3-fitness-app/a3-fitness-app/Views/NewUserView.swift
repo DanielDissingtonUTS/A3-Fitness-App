@@ -2,7 +2,7 @@ import SwiftUI
 import Combine
 
 struct NewUserView: View {
-    @StateObject var userManager: UserManager
+    @EnvironmentObject var userManager: UserManager
     @Binding var isNewUser: Bool
     
     var body: some View {
@@ -62,6 +62,7 @@ struct NewUserView: View {
 }
 
 #Preview {
-    NewUserView(userManager: UserManager(), isNewUser: Binding.constant(true))
+    NewUserView(isNewUser: Binding.constant(true))
+        .environmentObject(UserManager.shared)
 }
 
