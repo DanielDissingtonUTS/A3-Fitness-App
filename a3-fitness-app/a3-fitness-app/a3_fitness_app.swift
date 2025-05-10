@@ -1,12 +1,13 @@
 import SwiftUI
 
 @main
-struct a3_fitness_app: App {
-    
+struct A3_fitness_app: App {
+    @StateObject private var userManager = UserManager()
+
     var body: some Scene {
         WindowGroup {
             MainView()
-                .environmentObject(UserManager.shared)
+                .environmentObject(userManager)   // ← so all child views can use @EnvironmentObject
         }
     }
 }

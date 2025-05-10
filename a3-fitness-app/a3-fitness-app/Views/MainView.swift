@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MainView: View {
     @EnvironmentObject var userManager: UserManager
-    @State private var isNewUser = false
+    @State private var isNewUser      = false
     @State private var isSettingGoals = false
 
     var body: some View {
@@ -10,13 +10,12 @@ struct MainView: View {
             VStack(spacing: 20) {
                 // 1) Avatar + XP
                 AvatarView(user: userManager.user)
-                  // width = 45% of screen, height = 1.15× width + spacing (≈ circle + xp)
                     .frame(
                         width: UIScreen.main.bounds.width * 0.45,
                         height: (UIScreen.main.bounds.width * 0.45) * 1.15 + 12
                     )
 
-                // 2) Username + delete
+                // 2) Username + Delete button
                 HStack {
                     Text(userManager.user.name)
                         .font(.title2)
@@ -36,7 +35,7 @@ struct MainView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
 
-                // 4) List of saved exercises, scrollable, min 200pt tall
+                // 4) Scrollable list of saved exercises (min 200pt tall)
                 List {
                     if userManager.user.exercisePool.isEmpty {
                         Text("No saved exercises yet.")
@@ -54,11 +53,25 @@ struct MainView: View {
 
                 Spacer()
 
-                // 5) Manage Exercises button further down
+                // 5) Manage Exercises
                 NavigationLink {
                     ExerciseListView(userManager: userManager)
                 } label: {
                     Label("Manage Exercises", systemImage: "list.bullet")
+                        .font(.headline)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.accentColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .padding(.horizontal)
+
+                // 6) Workouts
+                NavigationLink {
+                    WorkoutView()
+                } label: {
+                    Label("Workouts", systemImage: "figure.walk")
                         .font(.headline)
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -72,25 +85,27 @@ struct MainView: View {
             .navigationTitle("Home")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack { // debug: reopen registration
+                    HStack {
+                        // Force‐open registration for testing
                         Button {
                             isNewUser = true
                         } label: {
                             Image(systemName: "person.crop.circle.badge.plus")
                         }
+                        // Settings
                         NavigationLink(destination: SettingsView()) {
                             Image(systemName: "gearshape")
                         }
                     }
                 }
             }
-            // 6) Registration flow
+            // 7) Registration flow
             .fullScreenCover(isPresented: $isNewUser) {
                 NewUserView(isNewUser: $isNewUser)
                     .interactiveDismissDisabled()
             }
+            // 8) After sign-up, prompt goals if none set
             .onChange(of: isNewUser) { newVal in
-                // after sign-up, if no goals, show goals sheet
                 if !newVal && userManager.user.goals.isEmpty {
                     isSettingGoals = true
                 }
@@ -99,8 +114,8 @@ struct MainView: View {
                 UserGoalsView(isSettingGoals: $isSettingGoals)
                     .interactiveDismissDisabled()
             }
+            // 9) Initial load
             .onAppear {
-                // initial load
                 userManager.readUser()
                 isNewUser = userManager.user.name.isEmpty
             }
@@ -116,6 +131,6 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
-            .environmentObject(UserManager.shared)
+            .environmentObject(UserManager())
     }
 }
