@@ -133,4 +133,4 @@ struct MainView_Previews: PreviewProvider {
         MainView()
             .environmentObject(UserManager())
     }
-}
+} 
