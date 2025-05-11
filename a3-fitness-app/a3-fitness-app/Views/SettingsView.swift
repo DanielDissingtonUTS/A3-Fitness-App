@@ -26,14 +26,14 @@ struct SettingsView: View {
                     
                     Text("Settings")
                         .foregroundColor(.white)
-                        .font(.system(size: size * 0.075))
+                        .font(Font.custom("ZenDots-Regular", size: size * 0.075))
                         .fontWeight(.bold)
                 }
                     .frame(height: height * 0.1)
                 
                 VStack {
                     Text("Themes")
-                        .font(.title)
+                        .font(Font.custom("ZenDots-Regular", size: 25))
                         .padding(.top)
 
                     ScrollView(.horizontal) {
@@ -48,7 +48,7 @@ struct SettingsView: View {
                 
                 VStack {
                     Text("Goals")
-                        .font(.title)
+                        .font(Font.custom("ZenDots-Regular", size: 25))
                         .padding(.top)
 
                     ScrollView(.horizontal) {
