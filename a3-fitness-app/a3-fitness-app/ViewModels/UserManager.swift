@@ -31,13 +31,15 @@ class UserManager: ObservableObject {
         name: String? = nil,
         level: Level? = nil,
         workouts: [Workout]? = nil,
-        theme: Theme? = nil
+        theme: Theme? = nil,
+        tasks: [Task]? = nil
     ) {
         user = User(
             name: name ?? user.name,
             level: level ?? user.level,
             workouts: workouts ?? user.workouts,
-            theme: theme ?? user.theme
+            theme: theme ?? user.theme,
+            tasks: tasks ?? user.tasks
         )
         saveUser()
     }

@@ -13,4 +13,5 @@ struct User: Identifiable, Codable {
         defaultTheme.unlocked = true
         return defaultTheme
     }()
+    var tasks: [Task] = []
 }

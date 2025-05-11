@@ -26,6 +26,14 @@ struct MainView: View {
                     }
                     .buttonStyle(.borderedProminent)
                 }
+                
+                Divider()
+                
+                HStack {
+                    for i in 0..<2 {
+                        print(i)
+                    }
+                }
 
                 Divider()
 

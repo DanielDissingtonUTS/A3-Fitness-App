@@ -68,20 +68,23 @@ struct ExerciseListView: View {
         }
         .listStyle(.insetGrouped)
         .navigationTitle("Exercises")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if isLoading {
-                    ProgressView()
-                } else {
-                    Button {
-                        Task { await loadExercises() }
-                    } label: {
-                        Image(systemName: "arrow.clockwise.circle")
-                    }
-                }
-            }
-        }
-        .task { await loadExercises() }
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarTrailing) {
+//                if isLoading {
+//                    ProgressView()
+//                } else {
+//                    Button(action: {
+//                        Task {
+//                            await loadExercises()
+//                        }
+//                    }) {
+//                        Image(systemName: "arrow.clockwise.circle")
+//                    }
+//                    .buttonStyle(PlainButtonStyle()) // Adding this to ensure proper behavior
+//                }
+//            }
+//        }
+//        .task { await loadExercises() }
     }
 
     // MARK: - API
