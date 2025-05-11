@@ -31,8 +31,9 @@ struct NewUserView: View {
                     
                     
                     TextField("", text: $userManager.user.name)
+                        .padding()
                         .multilineTextAlignment(.center)
-                        .font(.largeTitle)
+                        .font(Font.custom("ZenDots-Regular", size: 20))
                         .background (
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.gray, lineWidth: 1)
@@ -54,8 +55,11 @@ struct NewUserView: View {
                         isNewUser = false
                     }
                     .disabled(userManager.user.name.isEmpty)
-                        .font(.title)
-                        .buttonStyle(.borderedProminent)
+                    .font(Font.custom("ZenDots-Regular", size: 20))
+                    .padding(.vertical, 12) 
+                    .padding(.horizontal, 20)
+                    .buttonStyle(.borderedProminent)
+                    
                     
                     Spacer()
                 }
