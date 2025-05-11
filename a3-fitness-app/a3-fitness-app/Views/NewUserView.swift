@@ -19,12 +19,13 @@ struct NewUserView: View {
                 VStack {
                     Spacer()
                     
-                    Image("Logo")
+                    Image("FitXPLogo")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: size * 0.8, height: size * 0.8)
+                        .frame(width: size * 0.6, height: size * 0.6)
+                    Spacer()
                     
-                    Text("Enter your name:")
+                    Text("Enter username:")
                         .font(.title)
                     
                     TextField("", text: $userManager.user.name)
@@ -45,7 +46,7 @@ struct NewUserView: View {
                     
                     Spacer()
                     
-                    Button("Save") {
+                    Button("Continue") {
                         userManager.createUser(name: userManager.user.name, level: Level(level: 2, xp: 0)) // Changed to lvl 2 for testing
                         print(userManager.user.name)
                         isNewUser = false
