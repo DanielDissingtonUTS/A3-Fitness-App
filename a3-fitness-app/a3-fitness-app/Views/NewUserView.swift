@@ -35,7 +35,7 @@ struct NewUserView: View {
                         .multilineTextAlignment(.center)
                         .font(Font.custom("ZenDots-Regular", size: 20))
                         .background (
-                            RoundedRectangle(cornerRadius: 8)
+                            RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.gray, lineWidth: 1)
                         )
                         .padding(.horizontal)
