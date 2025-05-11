@@ -35,6 +35,7 @@ struct UserGoalsView: View {
                 }
             }
             .navigationTitle("Pick Your Goals")
+            .font(Font.custom("ZenDots-Regular", size: 16))
             .toolbar {
                 // 1) Clear out yesterday's date so they can re-pick
                 ToolbarItem(placement: .cancellationAction) {
@@ -52,7 +53,7 @@ struct UserGoalsView: View {
                         userManager.user.goalsDate = Date()
                         userManager.saveUser()
                         isSettingGoals = false
-                    }
+                    } 
                     .disabled(selected.isEmpty)
                 }
             }
