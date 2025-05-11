@@ -22,10 +22,10 @@ struct AvatarView: View {
             // 3) Level & XP text underneath
             HStack {
                 Text("\(user.level.xp) / \(user.level.level * 100) XP")
-                    .font(.subheadline).bold()
+                    .font(.custom("ZenDots-Regular", size: 14))
                 Spacer()
                 Text("Lv. \(user.level.level)")
-                    .font(.subheadline).bold()
+                    .font(.custom("ZenDots-Regular", size: 14))
             }
             .padding(.horizontal, 40)
         }

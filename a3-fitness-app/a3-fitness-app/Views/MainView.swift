@@ -11,19 +11,20 @@ struct MainView: View {
                 // 1) Avatar + XP
                 AvatarView(user: userManager.user)
                     .frame(
-                        width: UIScreen.main.bounds.width * 0.45,
-                        height: (UIScreen.main.bounds.width * 0.45) * 1.15 + 12
+                        width: UIScreen.main.bounds.width * 0.7,
+                        height: (UIScreen.main.bounds.width * 0.5) * 1.15 + 12
                     )
 
                 // 2) Username + Delete button
                 HStack {
                     Text(userManager.user.name)
-                        .font(.title2)
+                        .font(.custom("ZenDots-Regular", size: 20))
                         .bold()
                     Button("Delete") {
                         userManager.deleteUser()
                         isNewUser = true
                     }
+                    .font(.custom("ZenDots-Regular", size: 12))
                     .buttonStyle(.borderedProminent)
                 }
 
@@ -31,7 +32,7 @@ struct MainView: View {
 
                 // 3) “Your Exercises” header
                 Text("Your Exercises")
-                    .font(.headline)
+                    .font(.custom("ZenDots-Regular", size: 16))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
 
@@ -40,6 +41,7 @@ struct MainView: View {
                     if userManager.user.exercisePool.isEmpty {
                         Text("No saved exercises yet.")
                             .italic()
+                            .font(.custom("ZenDots-Regular", size: 12))
                             .foregroundColor(.secondary)
                     } else {
                         ForEach(userManager.user.exercisePool) { ex in
@@ -51,14 +53,12 @@ struct MainView: View {
                 .listStyle(.insetGrouped)
                 .frame(minHeight: 200)
 
-                Spacer()
-
                 // 5) Manage Exercises
                 NavigationLink {
                     ExerciseListView(userManager: userManager)
                 } label: {
                     Label("Manage Exercises", systemImage: "list.bullet")
-                        .font(.headline)
+                        .font(.custom("ZenDots-Regular", size: 16))
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.accentColor)
@@ -72,7 +72,7 @@ struct MainView: View {
                     WorkoutView()
                 } label: {
                     Label("Workouts", systemImage: "figure.walk")
-                        .font(.headline)
+                        .font(.custom("ZenDots-Regular", size: 16))
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.accentColor)
