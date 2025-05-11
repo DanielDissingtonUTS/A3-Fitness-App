@@ -10,10 +10,10 @@ struct WorkoutView: View {
                 if let workouts = userManager.user.workouts, !workouts.isEmpty {
                     ForEach(workouts.indices, id: \.self) { idx in
                         NavigationLink {
-                            // TODO: push into a detail/edit view for workouts[idx]
-                            Text("Detail for: \(workouts[idx].name)")
+                          WorkoutDetailView(workoutIndex: idx)
+                            .environmentObject(userManager)
                         } label: {
-                            Text(workouts[idx].name)
+                          Text(workouts[idx].name)
                         }
                     }
                     .onDelete(perform: deleteWorkouts)
