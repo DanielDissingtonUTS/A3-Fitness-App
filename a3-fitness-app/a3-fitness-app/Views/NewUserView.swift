@@ -26,7 +26,9 @@ struct NewUserView: View {
                     Spacer()
                     
                     Text("Enter username:")
-                        .font(.title)
+                        .font(Font.custom("ZenDots-Regular", size: 20))
+                        .padding()
+                    
                     
                     TextField("", text: $userManager.user.name)
                         .multilineTextAlignment(.center)
@@ -40,7 +42,7 @@ struct NewUserView: View {
                         .frame(maxWidth: width * 0.8)
                         .onReceive(Just(userManager.user.name)) { char in
                             if char.count > 20 { // This works when a real User object is fed in
-                                userManager.user.name = String(char.prefix(20))
+                                userManager.user.name = String(char.prefix(15))
                             }
                         }
                     
