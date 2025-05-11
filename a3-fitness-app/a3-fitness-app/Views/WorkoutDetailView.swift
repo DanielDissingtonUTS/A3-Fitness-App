@@ -1,141 +1,155 @@
 import SwiftUI
 
 struct WorkoutDetailView: View {
-  @EnvironmentObject var userManager: UserManager
-  let workoutIndex: Int
+    @EnvironmentObject var userManager: UserManager
+    let workoutIndex: Int
 
-  // MARK: – UI state, one slot per set
-  @State private var actualReps:   [String] = []
-  @State private var weightInputs: [String] = []
-  @State private var isDone:       [Bool]   = []
+    // UI state for each set
+    @State private var setCompletions: [Bool] = []
+    @State private var actualReps:      [Int]  = []
+    @State private var weightInputs:    [String] = []
 
-  // Conveniences
-  private var workout: Workout {
-    userManager.user.workouts![workoutIndex]
-  }
-  private var sets: [ExerciseSet] {
-    workout.sets
-  }
+    @Environment(\.dismiss) private var dismiss
 
-  var body: some View {
-    Form {
-      // For each set
-      ForEach(sets.indices, id: \.self) { idx in
-        let set = sets[idx]
+    // Convenience: the workout array & single workout
+    private var workouts: [Workout]? {
+        userManager.user.workouts
+    }
+    private var workout: Workout? {
+        guard let ws = workouts, ws.indices.contains(workoutIndex) else { return nil }
+        return ws[workoutIndex]
+    }
 
-        Section(header: Text(set.exercises.first?.name ?? "")) {
-          // TARGET
-          HStack {
-            Text("Target:")
-            Spacer()
-            Text("\(set.targetReps) reps")
-          }
+    var body: some View {
+        Group {
+            if let workout = workout {
+                Form {
+                    ForEach(0..<workout.sets.count, id: \.self) { idx in
+                        let set = workout.sets[idx]
+                        let title = set.exercises.first?.name ?? "Exercise"
 
-          // ACTUAL
-          HStack {
-            Text("Actual:")
-            Spacer()
-            TextField(
-              "reps",
-              text: Binding(
-                get: { actualReps[safe: idx] ?? "\(set.targetReps)" },
-                set: { new in
-                  pad(&actualReps, toAtLeast: idx + 1, with: "")
-                  actualReps[idx] = new
+                        // --- HERE’S THE NEW HEADER LOGIC ---
+                        // Find all the indices of this same exercise
+                        let sameExerciseIndices = workout.sets.enumerated()
+                            .compactMap { $1.exercises.first?.name == title ? $0 : nil }
+                        // Position in that group
+                        let position = (sameExerciseIndices.firstIndex(of: idx) ?? 0) + 1
+                        let total = sameExerciseIndices.count
+
+                        Section(header: Text("\(title) — Set \(position) of \(total)")) {
+                            // Target
+                            HStack {
+                                Text("Target:")
+                                Spacer()
+                                Text("\(set.targetReps) reps")
+                            }
+                            // Actual
+                            HStack {
+                                Text("Actual:")
+                                Spacer()
+                                TextField(
+                                    "0",
+                                    text: Binding(
+                                        get: {
+                                            actualReps.indices.contains(idx)
+                                                ? String(actualReps[idx])
+                                                : ""
+                                        },
+                                        set: { newValue in
+                                            if actualReps.indices.contains(idx) {
+                                                actualReps[idx] = Int(newValue) ?? set.targetReps
+                                            }
+                                        }
+                                    )
+                                )
+                                .keyboardType(.numberPad)
+                                Text(" reps")
+                            }
+                            // Weight
+                            HStack {
+                                Text("Weight:")
+                                Spacer()
+                                TextField(
+                                    "kg",
+                                    text: Binding(
+                                        get: {
+                                            weightInputs.indices.contains(idx)
+                                                ? weightInputs[idx]
+                                                : ""
+                                        },
+                                        set: { newValue in
+                                            if weightInputs.indices.contains(idx) {
+                                                weightInputs[idx] = newValue
+                                            }
+                                        }
+                                    )
+                                )
+                                .keyboardType(.decimalPad)
+                                Text(" kg")
+                            }
+                            // Done toggle
+                            Toggle(
+                                "Done",
+                                isOn: Binding(
+                                    get: {
+                                        setCompletions.indices.contains(idx)
+                                            ? setCompletions[idx]
+                                            : false
+                                    },
+                                    set: { newValue in
+                                        if setCompletions.indices.contains(idx) {
+                                            setCompletions[idx] = newValue
+                                        }
+                                    }
+                                )
+                            )
+                        }
+                    }
+
+                    Button("Finish Workout") {
+                        saveResults()
+                        dismiss()
+                    }
+                    .disabled(!setCompletions.allSatisfy { $0 })
                 }
-              )
-            )
-            .keyboardType(.numberPad)
-            .frame(width: 60)
-          }
-
-          // WEIGHT
-          HStack {
-            Text("Weight:")
-            Spacer()
-            TextField(
-              "kg",
-              text: Binding(
-                get: { weightInputs[safe: idx] ?? "" },
-                set: { new in
-                  pad(&weightInputs, toAtLeast: idx + 1, with: "")
-                  weightInputs[idx] = new
-                }
-              )
-            )
-            .keyboardType(.decimalPad)
-            .frame(width: 80)
-          }
-
-          // COMPLETED
-          Toggle(
-            "Done",
-            isOn: Binding(
-              get: { isDone[safe: idx] ?? false },
-              set: { new in
-                pad(&isDone, toAtLeast: idx + 1, with: false)
-                isDone[idx] = new
-              }
-            )
-          )
+                .navigationTitle(workout.name)
+                .onAppear(perform: initializeState)
+            } else {
+                Text("Unable to load workout.")
+                    .foregroundColor(.secondary)
+                    .onAppear { dismiss() }
+            }
         }
-      }
-
-      // FINISH BUTTON
-      Button("Finish Workout") {
-        saveResults()
-      }
-      .disabled(!isDone.allSatisfy { $0 })
-    }
-    .navigationTitle(workout.name)
-    .onAppear(perform: initializeState)
-  }
-
-  // MARK: – Initialization & helpers
-
-  private func initializeState() {
-    let count = sets.count
-
-    // Start with the model’s targets and weights
-    actualReps   = sets.map { "\($0.targetReps)" }
-    weightInputs = sets.map { $0.weight.map { "\($0)" } ?? "" }
-    isDone       = Array(repeating: false, count: count)
-  }
-
-  private func saveResults() {
-    var copy = userManager.user
-    var all   = copy.workouts!
-
-    var w = all[workoutIndex]
-    for i in w.sets.indices {
-      // parse actual reps
-      if let reps = Int(actualReps[safe: i] ?? "") {
-        w.sets[i].totalReps = reps
-      }
-      // parse weight
-      if let wgt = Double(weightInputs[safe: i] ?? "") {
-        w.sets[i].weight = wgt
-      }
     }
 
-    all[workoutIndex] = w
-    copy.workouts     = all
-    userManager.user  = copy
-    userManager.saveUser()
-  }
-
-  /// Ensures `arr.count >= minCount`, padding with `defaultValue` if needed.
-  private func pad<T>(_ arr: inout [T], toAtLeast minCount: Int, with defaultValue: T) {
-    if arr.count < minCount {
-      arr.append(contentsOf: Array(repeating: defaultValue, count: minCount - arr.count))
+    private func initializeState() {
+        guard let workout = workout else { return }
+        let count = workout.sets.count
+        setCompletions = Array(repeating: false, count: count)
+        actualReps    = workout.sets.map(\.targetReps)
+        weightInputs = workout.sets.map { set in
+            set.weight.map { String($0) } ?? ""
+        }
     }
-  }
-}
 
-// MARK: – Safe‐index extension
+    private func saveResults() {
+        guard var ws = userManager.user.workouts,
+              ws.indices.contains(workoutIndex)
+        else { return }
 
-private extension Array {
-  subscript(safe i: Int) -> Element? {
-    indices.contains(i) ? self[i] : nil
-  }
+        var w = ws[workoutIndex]
+        for idx in w.sets.indices {
+            if actualReps.indices.contains(idx) {
+                w.sets[idx].totalReps = actualReps[idx]
+            }
+            if weightInputs.indices.contains(idx),
+               let val = Double(weightInputs[idx]) {
+                w.sets[idx].weight = val
+            }
+        }
+
+        ws[workoutIndex] = w
+        userManager.user.workouts = ws
+        userManager.saveUser()
+    }
 }

@@ -105,15 +105,22 @@ struct NewWorkoutView: View {
     }
 
     private func saveWorkout() {
-        // Build your array of ExerciseSet
-        let sets = selectedExercises.map { ex in
-            ExerciseSet(
-                exercises: [ex],
-                targetReps: repsByExercise[ex] ?? 1,
-                totalReps: nil,
-                weight: nil
-            )
-        }
+        // Build one ExerciseSet per “set” the user chose
+          var sets: [ExerciseSet] = []
+          for ex in selectedExercises {
+            let reps  = repsByExercise[ex] ?? 1
+            let count = setsByExercise[ex]   ?? 1
+            for _ in 1...count {
+              sets.append(
+                ExerciseSet(
+                  exercises:   [ex],
+                  targetReps:  reps,
+                  totalReps:   nil,
+                  weight:      nil
+                )
+              )
+            }
+          }
 
         // Create the Workout
         let workout = Workout(
