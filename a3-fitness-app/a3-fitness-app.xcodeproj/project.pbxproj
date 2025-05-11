@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7788BF832DD0E4AE001D5AA2 /* Exceptions for "a3-fitness-app" folder in "a3-fitness-app" target */ = {
+		BEDC36002DD1628600B90176 /* Exceptions for "a3-fitness-app" folder in "a3-fitness-app" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +24,7 @@
 		BE233A852DB7349D0029C76C /* a3-fitness-app */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				7788BF832DD0E4AE001D5AA2 /* Exceptions for "a3-fitness-app" folder in "a3-fitness-app" target */,
+				BEDC36002DD1628600B90176 /* Exceptions for "a3-fitness-app" folder in "a3-fitness-app" target */,
 			);
 			path = "a3-fitness-app";
 			sourceTree = "<group>";
