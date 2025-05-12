@@ -46,20 +46,6 @@ struct SettingsView: View {
                 }
                     .background(.white)
                 
-                VStack {
-                    Text("Goals")
-                        .font(Font.custom("ZenDots-Regular", size: 25))
-                        .padding(.top)
-
-                    VStack(spacing: 0) {
-                        ForEach(userManager.user.goals.indices, id: \.self) { index in
-                            Text(" -  " + userManager.user.goals[index])
-                                
-                        }
-                    }
-                    
-                    Spacer()
-                }
                     .frame(width: 400, height: 300)
                     .background(.white)
                     

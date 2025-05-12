@@ -12,9 +12,9 @@ class UserManager: ObservableObject {
     // CREATE
     func createUser(name: String, level: Level) {
         let tasks: [Task] = [
-            Task(description: TaskDetails.description[0], xp: 100, complete: false),
-            Task(description: TaskDetails.description[1], xp: 200, complete: false),
-            Task(description: TaskDetails.description[2], xp: 310, complete: false)
+            Task(description: TaskDetails.description[0], xp: 50, complete: false),
+            Task(description: TaskDetails.description[1], xp: 75, complete: false),
+            Task(description: TaskDetails.description[2], xp: 100, complete: false)
         ]
         
         user = User(name: name, level: level, tasks: tasks)

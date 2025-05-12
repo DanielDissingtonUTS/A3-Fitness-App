@@ -3,13 +3,13 @@ import SwiftUI
 struct MainView: View {
     @EnvironmentObject var userManager: UserManager
     @State private var isNewUser      = false
-    @State private var isSettingGoals = false
+//    @State private var isSettingGoals = false
 
     var body: some View {
         NavigationStack {
             ZStack {
                 Rectangle()
-                    .foregroundColor(Color.defaultPrimary)
+                    .foregroundColor(Color(userManager.user.theme.primaryColor))
                     .frame(maxWidth: 402, maxHeight: 425)
                     .position(x: 201, y: 120)
                 VStack {
@@ -25,36 +25,31 @@ struct MainView: View {
                         Text(userManager.user.name)
                             .font(Font.custom("ZenDots-Regular", size: 20))
                             .foregroundColor(.white)
-                        Button("Delete") {
+                        Button(action: {
                             userManager.deleteUser()
                             isNewUser = true
+                        }) {
+                            Image(systemName: "trash")
                         }
-                        .buttonStyle(.borderedProminent)
+                        .foregroundColor(Color(userManager.user.theme.secondaryColor))
+//                        .buttonStyle(.borderedProminent)
                     }
                     .padding(.top, 20)
+                    
                     
                     Divider()
                     
                     Text("Daily Tasks")
                         .font(Font.custom("ZenDots-Regular", size: 25))
                         .bold()
-                        .padding(.bottom)
+                        .padding(.vertical)
                 
                     ForEach(userManager.user.tasks.indices, id: \.self) { index in
                         //Spacer()
                         HStack {
-                            Button(action: {
-                                print("pressed")
-                                userManager.user.tasks[index].complete.toggle()
-                                if userManager.user.tasks[index].complete == true {
-                                    userManager.user.level.xp += userManager.user.tasks[index].xp
-                                } else {
-                                    userManager.user.level.xp -= userManager.user.tasks[index].xp
-                                }
-                            }){
-                                Image(systemName: userManager.user.tasks[index].complete ? "checkmark.square" : "square")
-                                    .foregroundColor(.accentColor) // Optional
-                            }
+                            Image(systemName: userManager.user.tasks[index].complete ? "checkmark.square" : "square")
+                                .foregroundColor(Color(.black))
+                            
 
                             Spacer()
                             VStack (alignment: .trailing) {
@@ -82,8 +77,10 @@ struct MainView: View {
                             } label: {
                                 Image(systemName: "plus")
                             }
+                            .foregroundColor(Color(userManager.user.theme.primaryColor))
                         }
                     }
+                    
                     
                     
                     
@@ -116,14 +113,14 @@ struct MainView: View {
                             .font(Font.custom("ZenDots-Regular", size: 20))
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color.accentColor)
+                            .background(Color(userManager.user.theme.primaryColor))
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
                     .padding(.horizontal)
                 }
                 .padding()
-                //.navigationTitle("Home")
+//                .navigationTitle("Home")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         HStack {
@@ -146,15 +143,15 @@ struct MainView: View {
                         .interactiveDismissDisabled()
                 }
                 // 8) After sign-up, prompt goals if none set
-                .onChange(of: isNewUser) { newVal in
-                    if !newVal && userManager.user.goals.isEmpty {
-                        isSettingGoals = true
-                    }
-                }
-                .sheet(isPresented: $isSettingGoals) {
-                    UserGoalsView(isSettingGoals: $isSettingGoals)
-                        .interactiveDismissDisabled()
-                }
+//                .onChange(of: isNewUser) { newVal in
+//                    if !newVal && userManager.user.goals.isEmpty {
+//                        isSettingGoals = true
+//                    }
+//                }
+//                .sheet(isPresented: $isSettingGoals) {
+//                    UserGoalsView(isSettingGoals: $isSettingGoals)
+//                        .interactiveDismissDisabled()
+//                }
                 // 9) Initial load
                 .onAppear {
                     userManager.readUser()

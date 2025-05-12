@@ -20,7 +20,7 @@ struct PRView: View {
                 }
             }
         }
-        .navigationTitle("Personal Records")
+        .navigationTitle("New Records")
         .onAppear {
             records = calculateRecords()
         }
@@ -39,7 +39,7 @@ struct PRView: View {
                       let weight = set.weight,
                       let reps = set.totalReps else { continue }
                 
-                let key = exercise.id
+                let key = exercise.name
                 let current = best[key]
                 
                 // Replace if this set is heavier or equally heavy with more reps
@@ -50,8 +50,6 @@ struct PRView: View {
             }
         }
         
-        print("Broke for loop")
-
         // Build PRRecord array and update userManager
         let prRecords = best.values.map { record in
             PRRecord(exercise: record.exercise, bestReps: record.reps, bestWeight: record.weight)
