@@ -17,10 +17,10 @@ struct ExerciseListView: View {
                                 switch phase {
                                 case .success(let img):
                                     img.resizable()
-                                       .scaledToFill()
-                                       .frame(width: 50, height: 50)
-                                       .clipped()
-                                       .cornerRadius(6)
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipped()
+                                        .cornerRadius(6)
                                 default:
                                     ProgressView()
                                         .frame(width: 50, height: 50)
@@ -34,7 +34,7 @@ struct ExerciseListView: View {
                     .onDelete(perform: deleteFromPool)
                 }
             }
-
+            
             Section("Discover More") {
                 ForEach(apiExercises) { ex in
                     HStack {
@@ -42,10 +42,10 @@ struct ExerciseListView: View {
                             switch phase {
                             case .success(let img):
                                 img.resizable()
-                                   .scaledToFill()
-                                   .frame(width: 50, height: 50)
-                                   .clipped()
-                                   .cornerRadius(6)
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipped()
+                                    .cornerRadius(6)
                             default:
                                 ProgressView()
                                     .frame(width: 50, height: 50)
@@ -73,15 +73,16 @@ struct ExerciseListView: View {
                 if isLoading {
                     ProgressView()
                 } else {
-                    Button {
-                        Task { await loadExercises() }
-                    } label: {
+                    Button(action: {
+                        Task {
+                            await loadExercises()
+                        }
+                    }, label: {
                         Image(systemName: "arrow.clockwise.circle")
-                    }
+                    })
                 }
             }
         }
-        .task { await loadExercises() }
     }
 
     // MARK: - API
@@ -109,6 +110,7 @@ struct ExerciseListView: View {
         userManager.saveUser()
     }
 }
+
 
 #Preview {
     NavigationStack {
