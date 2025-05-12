@@ -7,15 +7,15 @@ struct A3_fitness_app: App {
     init(){
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.defaultPrimary
+        appearance.backgroundColor = UIColor(.white)
         
         if let customFont = UIFont(name: "ZenDots-Regular", size: 35) {
             appearance.titleTextAttributes = [
-                .foregroundColor: UIColor.white,
+                .foregroundColor: UIColor.black,
                 .font: customFont
             ]
             appearance.largeTitleTextAttributes = [
-                .foregroundColor: UIColor.white,
+                .foregroundColor: UIColor.black,
                 .font: customFont]
         } else {
             print("Custom font not found")

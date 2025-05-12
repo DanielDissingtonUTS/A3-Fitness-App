@@ -2,7 +2,8 @@ import SwiftUI
 
 struct AvatarView: View {
     let user: User
-
+    @EnvironmentObject var userManager: UserManager
+    
     var body: some View {
         VStack(spacing: 16) {
             // 1) The round avatar
@@ -12,6 +13,7 @@ struct AvatarView: View {
                 .clipShape(Circle())
                 // pick a diameter we like:
                 .frame(width: 165, height: 165)
+                
 
             // 2) The XP bar + labels
             XPView(level: user.level)
@@ -21,7 +23,7 @@ struct AvatarView: View {
 
             // 3) Level & XP text underneath
             HStack {
-                Text("\(user.level.xp) / \(user.level.level * 400) XP")
+                Text("\(user.level.xp) / \(user.level.level * 100) XP")
                     .font(Font.custom("ZenDots-Regular", size: 15))
                     .foregroundColor(.white)
                 Spacer()
@@ -46,5 +48,6 @@ struct AvatarView_Previews: PreviewProvider {
         ))
         .previewLayout(.sizeThatFits)
         .padding()
+        .environmentObject(UserManager())
     }
 }

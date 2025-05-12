@@ -2,6 +2,7 @@ import SwiftUI
 
 struct XPView: View {
     let level: Level
+    @EnvironmentObject var userManager: UserManager
 
     var body: some View {
         GeometryReader { geo in
@@ -14,11 +15,12 @@ struct XPView: View {
                     .frame(width: totalWidth, height: geo.size.height)
                 // draw the filled portion
                 Capsule()
-                    .fill(Color.blue)
+                    .fill((Color(userManager.user.theme.secondaryColor)))
                     .frame(
                       width: totalWidth * CGFloat(level.progress),
                       height: geo.size.height
                     )
+                
             }
         }
     }
@@ -26,9 +28,10 @@ struct XPView: View {
 
 struct XPView_Previews: PreviewProvider {
     static var previews: some View {
-        XPView(level: Level(level: 2, xp: 35))
+        XPView(level: Level(level: 2, xp: 50))
             .frame(height: 30)
             .padding()
             .previewLayout(.sizeThatFits)
+            .environmentObject(UserManager())
     }
 }
