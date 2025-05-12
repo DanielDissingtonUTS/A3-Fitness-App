@@ -50,8 +50,9 @@ struct NewUserView: View {
                     Spacer()
                     
                     Button("Continue") {
-                        userManager.createUser(name: userManager.user.name, level: Level(level: 2, xp: 0)) // Changed to lvl 2 for testing
-                        generateTasks()
+                        
+                        
+                        userManager.createUser(name: userManager.user.name, level: Level(level: 1, xp: 0))
                         isNewUser = false
                     }
                     .disabled(userManager.user.name.isEmpty)
@@ -65,16 +66,6 @@ struct NewUserView: View {
                 }
             }
         }
-    }
-    
-    private func generateTasks() {
-        var newTasks: [Task] = []
-
-        for i in 0..<3 {
-            newTasks.append(Task(description: TaskDetails.description[i], xp: TaskDetails.xp[i], complete: false))
-        }
-        
-        userManager.updateUser(tasks: newTasks)
     }
 }
 

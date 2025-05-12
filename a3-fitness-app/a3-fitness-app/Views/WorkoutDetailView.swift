@@ -153,6 +153,7 @@ struct WorkoutDetailView: View {
     // MARK: — Save results *and* PRs
     // MARK: — Save results *and* PRs
     private func saveResultsAndPRs() {
+        print("Save results and prs RUNS")
       guard var ws = userManager.user.workouts,
             ws.indices.contains(workoutIndex)
       else { return }

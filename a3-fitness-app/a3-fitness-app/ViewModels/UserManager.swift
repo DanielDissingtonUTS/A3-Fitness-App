@@ -5,14 +5,19 @@ import Foundation
 class UserManager: ObservableObject {
     static let shared = UserManager()
 
-    @Published var user: User = User(name: "",
-                                      level: Level(level: 1, xp: 0))
+    @Published var user: User = User(name: "", level: Level(level: 1, xp: 0))
 
     private let url = URL.documentsDirectory.appending(path: "user.json")
 
     // CREATE
     func createUser(name: String, level: Level) {
-        user = User(name: name, level: level)
+        let tasks: [Task] = [
+            Task(description: TaskDetails.description[0], xp: 10, complete: false),
+            Task(description: TaskDetails.description[1], xp: 20, complete: false),
+            Task(description: TaskDetails.description[2], xp: 30, complete: false)
+        ]
+        
+        user = User(name: name, level: level, tasks: tasks)
         saveUser()
     }
 
