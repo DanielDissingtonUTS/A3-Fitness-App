@@ -13,4 +13,6 @@ struct User: Identifiable, Codable {
         defaultTheme.unlocked = true
         return defaultTheme
     }()
+    /// Maps each exercise’s ID to its all-time best reps/weight
+    var prRecords: [String: PRRecord] = [:]
 }
