@@ -52,13 +52,16 @@ struct SettingsView: View {
                         .padding(.top)
 
                     ScrollView(.horizontal) {
-                        LazyHGrid(rows: rows, spacing: 0) {
+                        VStack(spacing: 0) {
                             ForEach(userManager.user.goals.indices, id: \.self) { index in
-                                Text(userManager.user.goals[index])
+                                Text(" -  " + userManager.user.goals[index])
+                                    
                             }
                         }
                     }
+                    Spacer()
                 }
+                    .frame(width: 400, height: 300)
                     .background(.white)
                     
                     
