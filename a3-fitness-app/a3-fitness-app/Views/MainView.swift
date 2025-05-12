@@ -40,17 +40,22 @@ struct MainView: View {
                         .bold()
                         .padding(.bottom)
                 
-                    ForEach(userManager.user.tasks) { task in
-                        Spacer()
+                    ForEach(userManager.user.tasks.indices, id: \.self) { index in
+                        //Spacer()
                         HStack {
-                            
-                            Image(systemName: task.complete ? "checkmark.square" : "square")
-                                .foregroundColor(.accentColor) // Optional
+                            Button(action: {
+                                print("pressed")
+                                userManager.user.tasks[index].complete.toggle()
+                            }){
+                                Image(systemName: userManager.user.tasks[index].complete ? "checkmark.square" : "square")
+                                    .foregroundColor(.accentColor) // Optional
+                            }
+
                             Spacer()
                             VStack (alignment: .trailing) {
-                                Text("\(task.description)")
+                                Text("\(userManager.user.tasks[index].description)")
                                     .font(Font.custom("ZenDots-Regular", size: 15))
-                                Text("\(String(task.xp)) XP ")
+                                Text("\(String(userManager.user.tasks[index].xp)) XP ")
                                     .font(Font.custom("ZenDots-Regular", size: 12))
                                     .foregroundColor(.black.opacity(0.5))
                             }
