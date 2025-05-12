@@ -29,9 +29,24 @@ struct MainView: View {
                 
                 Divider()
                 
-                HStack {
-                    for i in 0..<2 {
-                        print(i)
+                VStack {
+                    Text("Daily Tasks")
+                        .font(.title2)
+                        .bold()
+                    ForEach(userManager.user.tasks) { task in
+                        Spacer()
+                        HStack {
+                            Image(systemName: task.complete ? "checkmark.square" : "square")
+                                .foregroundColor(.accentColor) // Optional
+                            Spacer()
+                            VStack (alignment: .trailing) {
+                                Text("\(task.description)\(task.exercise.name)")
+                                    .font(.body)
+                                Text("\(String(task.xp)) XP ")
+                            }
+                        }
+                        
+                        
                     }
                 }
 
@@ -126,6 +141,7 @@ struct MainView: View {
             .onAppear {
                 userManager.readUser()
                 isNewUser = userManager.user.name.isEmpty
+                generateTasks()
             }
         }
     }
@@ -133,6 +149,17 @@ struct MainView: View {
     private func deleteFromPool(at offsets: IndexSet) {
         userManager.user.exercisePool.remove(atOffsets: offsets)
         userManager.saveUser()
+    }
+    
+    private func generateTasks() {
+        var newTasks: [Task] = []
+        let exercise: Exercise = Exercise(exerciseId: "1", name: "Placeholder", gifUrl: "Test", targetMuscles: ["Test"], bodyParts: ["Test"], equipments: ["Test"], secondaryMuscles: ["Test"], instructions: ["Test"])// Placeholder
+        
+        for i in 0..<3 {
+            newTasks.append(Task(exercise: exercise, description: TaskDetails.description[i], xp: TaskDetails.xp[i], complete: false))
+        }
+        
+        userManager.updateUser(tasks: newTasks)
     }
 }
 
