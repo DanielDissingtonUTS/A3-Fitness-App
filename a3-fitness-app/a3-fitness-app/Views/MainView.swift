@@ -46,6 +46,11 @@ struct MainView: View {
                             Button(action: {
                                 print("pressed")
                                 userManager.user.tasks[index].complete.toggle()
+                                if userManager.user.tasks[index].complete == true {
+                                    userManager.user.level.xp += userManager.user.tasks[index].xp
+                                } else {
+                                    userManager.user.level.xp -= userManager.user.tasks[index].xp
+                                }
                             }){
                                 Image(systemName: userManager.user.tasks[index].complete ? "checkmark.square" : "square")
                                     .foregroundColor(.accentColor) // Optional
