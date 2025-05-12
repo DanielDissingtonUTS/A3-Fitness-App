@@ -150,8 +150,6 @@ struct MainView: View {
         userManager.user.exercisePool.remove(atOffsets: offsets)
         userManager.saveUser()
     }
-    
-    
 }
 
 struct MainView_Previews: PreviewProvider {

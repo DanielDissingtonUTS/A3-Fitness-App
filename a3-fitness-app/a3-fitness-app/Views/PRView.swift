@@ -65,11 +65,28 @@ struct PRView: View {
         
         userManager.user.tasks[0].complete = task1complete
         userManager.user.tasks[2].complete = true
-        userManager.updateUser(prRecords: prRecords)
         
+        for i in userManager.user.tasks.indices {
+            if userManager.user.tasks[i].complete {
+                userManager.user.level.xp += userManager.user.tasks[i].xp
+                updateLevel()
+            }
+        }
+        
+        userManager.updateUser(prRecords: prRecords)
 
         return best.map { ($0.key, $0.value.weight) }
                    .sorted { $0.0 < $1.0 }
+    }
+    
+    func updateLevel() {
+        let xpRequired: Int = userManager.user.level.level * 100
+        
+        if userManager.user.level.xp >= xpRequired {
+            userManager.user.level.level += 1
+            userManager.user.level.xp = userManager.user.level.xp - xpRequired
+            updateLevel() // Runs recursively to check user hasn't gone up multiple levels
+        }
     }
         
 }
