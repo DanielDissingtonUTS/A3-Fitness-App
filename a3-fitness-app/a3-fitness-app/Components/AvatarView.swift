@@ -11,7 +11,7 @@ struct AvatarView: View {
                 .scaledToFill()
                 .clipShape(Circle())
                 // pick a diameter we like:
-                .frame(width: 180, height: 180)
+                .frame(width: 200, height: 200)
 
             // 2) The XP bar + labels
             XPView(level: user.level)
@@ -22,12 +22,12 @@ struct AvatarView: View {
             // 3) Level & XP text underneath
             HStack {
                 Text("\(user.level.xp) / \(user.level.level * 100) XP")
-                    .font(.subheadline).bold()
+                    .font(Font.custom("ZenDots-Regular", size: 15))
                 Spacer()
                 Text("Lv. \(user.level.level)")
-                    .font(.subheadline).bold()
+                    .font(Font.custom("ZenDots-Regular", size: 15))
             }
-            .padding(.horizontal, 40)
+            .padding(.horizontal, 30)
         }
     }
 }

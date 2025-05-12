@@ -8,25 +8,31 @@ struct MainView: View {
     var body: some View {
         NavigationStack {
             VStack() {
-                // 1) Avatar + XP
-                AvatarView(user: userManager.user)
-                    .frame(
-                        width: UIScreen.main.bounds.width * 0.70,
-                        height: (UIScreen.main.bounds.width * 0.45) * 1.15 + 12
-                    )
-
-                // 2) Username + Delete button
-                HStack {
-                    Text(userManager.user.name)
-                        .font(Font.custom("ZenDots-Regular", size: 20))
-                        .bold()
-                    Button("Delete") {
-                        userManager.deleteUser()
-                        isNewUser = true
+                VStack {
+                    // 1) Avatar + XP
+                    AvatarView(user: userManager.user)
+                        .frame(
+                            width: UIScreen.main.bounds.width * 0.65,
+                            height: (UIScreen.main.bounds.width * 0.50) * 1.15 + 12
+                        )
+                    
+                    // 2) Username + Delete button
+                    HStack {
+                        Text(userManager.user.name)
+                            .font(Font.custom("ZenDots-Regular", size: 20))
+                            .bold()
+                        Button("Delete") {
+                            userManager.deleteUser()
+                            isNewUser = true
+                        }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .padding(.top, 20)
                 }
-                .padding(.top, 20)
+                
+                .frame(maxWidth: .infinity)
+                .background(Color.blue.opacity(0.2))
+                //.padding(.bottom)
                 
                 Divider()
                 
@@ -105,7 +111,7 @@ struct MainView: View {
                 .padding(.horizontal)
             }
             .padding()
-            .navigationTitle("Home")
+            //.navigationTitle("Home")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {
