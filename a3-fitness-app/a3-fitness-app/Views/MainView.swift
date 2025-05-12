@@ -11,14 +11,14 @@ struct MainView: View {
                 // 1) Avatar + XP
                 AvatarView(user: userManager.user)
                     .frame(
-                        width: UIScreen.main.bounds.width * 0.45,
+                        width: UIScreen.main.bounds.width * 0.70,
                         height: (UIScreen.main.bounds.width * 0.45) * 1.15 + 12
                     )
 
                 // 2) Username + Delete button
                 HStack {
                     Text(userManager.user.name)
-                        .font(.title2)
+                        .font(Font.custom("ZenDots-Regular", size: 20))
                         .bold()
                     Button("Delete") {
                         userManager.deleteUser()
@@ -31,7 +31,7 @@ struct MainView: View {
                 Divider()
                 
                 Text("Daily Tasks")
-                    .font(.title2)
+                    .font(Font.custom("ZenDots-Regular", size: 20))
                     .bold()
                 
                 ForEach(userManager.user.tasks) { task in
@@ -43,7 +43,7 @@ struct MainView: View {
                         Spacer()
                         VStack (alignment: .trailing) {
                             Text("\(task.description)")
-                                .font(.body)
+                                .font(Font.custom("ZenDots-Regular", size: 15))
                             Text("\(String(task.xp)) XP ")
                         }
                     }
@@ -54,7 +54,7 @@ struct MainView: View {
                 // 3) “Your Exercises” header
                 ZStack{
                     Text("Your Exercises")
-                        .font(.title2)
+                        .font(Font.custom("ZenDots-Regular", size: 20))
                         .bold()
                         .padding(.horizontal)
                     HStack {
@@ -95,7 +95,7 @@ struct MainView: View {
                     WorkoutView()
                 } label: {
                     Label("Workouts", systemImage: "figure.walk")
-                        .font(.headline)
+                        .font(Font.custom("ZenDots-Regular", size: 20))
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.accentColor)
