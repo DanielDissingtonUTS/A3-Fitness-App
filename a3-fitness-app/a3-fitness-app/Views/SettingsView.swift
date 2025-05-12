@@ -51,14 +51,13 @@ struct SettingsView: View {
                         .font(Font.custom("ZenDots-Regular", size: 25))
                         .padding(.top)
 
-                    ScrollView(.horizontal) {
-                        VStack(spacing: 0) {
-                            ForEach(userManager.user.goals.indices, id: \.self) { index in
-                                Text(" -  " + userManager.user.goals[index])
-                                    
-                            }
+                    VStack(spacing: 0) {
+                        ForEach(userManager.user.goals.indices, id: \.self) { index in
+                            Text(" -  " + userManager.user.goals[index])
+                                
                         }
                     }
+                    
                     Spacer()
                 }
                     .frame(width: 400, height: 300)

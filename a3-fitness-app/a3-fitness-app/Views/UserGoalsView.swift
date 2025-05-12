@@ -38,7 +38,7 @@ struct UserGoalsView: View {
             .toolbar {
                 // 1) Clear out yesterday's date so they can re-pick
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("🗑️ Clear Goals Date") {
+                    Button("🗑️ Clear Goals") {
                         userManager.user.goalsDate = nil
                         userManager.saveUser()
                         // re-present this sheet immediately
