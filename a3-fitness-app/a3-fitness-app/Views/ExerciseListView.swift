@@ -55,7 +55,8 @@ struct ExerciseListView: View {
 //                                }
 //                            }
                             Text(ex.name)
-                                .font(.subheadline)
+                                .font(Font.custom("ZenDots-Regular", size: 15))
+                            
                             Spacer()
                             Button {
                                 addToPool(ex)

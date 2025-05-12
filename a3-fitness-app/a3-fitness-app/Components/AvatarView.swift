@@ -11,7 +11,7 @@ struct AvatarView: View {
                 .scaledToFill()
                 .clipShape(Circle())
                 // pick a diameter we like:
-                .frame(width: 200, height: 200)
+                .frame(width: 165, height: 165)
 
             // 2) The XP bar + labels
             XPView(level: user.level)

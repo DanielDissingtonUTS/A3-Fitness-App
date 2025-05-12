@@ -36,9 +36,10 @@ struct MainView: View {
                     Divider()
                     
                     Text("Daily Tasks")
-                        .font(Font.custom("ZenDots-Regular", size: 20))
+                        .font(Font.custom("ZenDots-Regular", size: 25))
                         .bold()
-                    
+                        .padding(.bottom)
+                
                     ForEach(userManager.user.tasks) { task in
                         Spacer()
                         HStack {
@@ -50,6 +51,8 @@ struct MainView: View {
                                 Text("\(task.description)")
                                     .font(Font.custom("ZenDots-Regular", size: 15))
                                 Text("\(String(task.xp)) XP ")
+                                    .font(Font.custom("ZenDots-Regular", size: 12))
+                                    .foregroundColor(.black.opacity(0.5))
                             }
                         }
                     }
@@ -59,7 +62,7 @@ struct MainView: View {
                     // 3) “Your Exercises” header
                     ZStack{
                         Text("Your Exercises")
-                            .font(Font.custom("ZenDots-Regular", size: 20))
+                            .font(Font.custom("ZenDots-Regular", size: 25))
                             .bold()
                             .padding(.horizontal)
                         HStack {
