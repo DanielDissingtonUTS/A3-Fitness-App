@@ -32,6 +32,7 @@ class UserManager: ObservableObject {
         level: Level? = nil,
         workouts: [Workout]? = nil,
         theme: Theme? = nil,
+        prRecords: [PRRecord]? = nil,
         tasks: [Task]? = nil
     ) {
         user = User(
@@ -39,6 +40,7 @@ class UserManager: ObservableObject {
             level: level ?? user.level,
             workouts: workouts ?? user.workouts,
             theme: theme ?? user.theme,
+            prRecords: prRecords ?? user.prRecords,
             tasks: tasks ?? user.tasks
         )
         saveUser()

@@ -51,7 +51,7 @@ struct NewUserView: View {
                     
                     Button("Continue") {
                         userManager.createUser(name: userManager.user.name, level: Level(level: 2, xp: 0)) // Changed to lvl 2 for testing
-                        print(userManager.user.name)
+                        generateTasks()
                         isNewUser = false
                     }
                     .disabled(userManager.user.name.isEmpty)
@@ -65,6 +65,16 @@ struct NewUserView: View {
                 }
             }
         }
+    }
+    
+    private func generateTasks() {
+        var newTasks: [Task] = []
+
+        for i in 0..<3 {
+            newTasks.append(Task(description: TaskDetails.description[i], xp: TaskDetails.xp[i], complete: false))
+        }
+        
+        userManager.updateUser(tasks: newTasks)
     }
 }
 

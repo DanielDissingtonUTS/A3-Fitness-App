@@ -1,7 +1,7 @@
 import Foundation
 
 struct PRRecord: Codable {
-    let exerciseId: String
+    let exercise: Exercise
     var bestReps: Int
     var bestWeight: Double
 }

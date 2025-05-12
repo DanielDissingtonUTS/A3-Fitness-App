@@ -14,6 +14,6 @@ struct User: Identifiable, Codable {
         return defaultTheme
     }()
     /// Maps each exercise’s ID to its all-time best reps/weight
-    var prRecords: [String: PRRecord] = [:]
+    var prRecords: [PRRecord] = []
     var tasks: [Task] = []
 }

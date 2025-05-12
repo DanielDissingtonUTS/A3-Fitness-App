@@ -1,4 +1,4 @@
-struct Exercise: Codable, Identifiable, Hashable {
+struct Exercise: Codable, Identifiable, Hashable, Equatable {
     var id: String {
         return exerciseId
     }

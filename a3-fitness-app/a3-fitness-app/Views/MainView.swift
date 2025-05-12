@@ -7,143 +7,141 @@ struct MainView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                // 1) Avatar + XP
-                AvatarView(user: userManager.user)
-                    .frame(
-                        width: UIScreen.main.bounds.width * 0.45,
-                        height: (UIScreen.main.bounds.width * 0.45) * 1.15 + 12
-                    )
+            ScrollView {
+                VStack(spacing: 20) {
+                    // 1) Avatar + XP
+                    AvatarView(user: userManager.user)
+                        .frame(
+                            width: UIScreen.main.bounds.width * 0.45,
+                            height: (UIScreen.main.bounds.width * 0.45) * 1.15 + 12
+                        )
 
-                // 2) Username + Delete button
-                HStack {
-                    Text(userManager.user.name)
-                        .font(.title2)
-                        .bold()
-                    Button("Delete") {
-                        userManager.deleteUser()
-                        isNewUser = true
+                    // 2) Username + Delete button
+                    HStack {
+                        Text(userManager.user.name)
+                            .font(.title2)
+                            .bold()
+                        Button("Delete") {
+                            userManager.deleteUser()
+                            isNewUser = true
+                        }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .buttonStyle(.borderedProminent)
-                }
-                
-                Divider()
-                
-                VStack {
+                    
+                    Divider()
+                    
                     Text("Daily Tasks")
                         .font(.title2)
                         .bold()
+                    
                     ForEach(userManager.user.tasks) { task in
-                        Spacer()
                         HStack {
                             Image(systemName: task.complete ? "checkmark.square" : "square")
                                 .foregroundColor(.accentColor) // Optional
                             Spacer()
                             VStack (alignment: .trailing) {
-                                Text("\(task.description)\(task.exercise.name)")
+                                Text("\(task.description)")
                                     .font(.body)
                                 Text("\(String(task.xp)) XP ")
                             }
                         }
-                        
-                        
                     }
-                }
 
-                Divider()
+                    Divider()
 
-                // 3) “Your Exercises” header
-                Text("Your Exercises")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    // 3) “Your Exercises” header
+                    Text("Your Exercises")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+
+                    // 4) Scrollable list of saved exercises (min 200pt tall)
+                    List {
+                        if userManager.user.exercisePool.isEmpty {
+                            Text("No saved exercises yet.")
+                                .italic()
+                                .foregroundColor(.secondary)
+                        } else {
+                            ForEach(userManager.user.exercisePool) { ex in
+                                Text(ex.name)
+                            }
+                            .onDelete(perform: deleteFromPool)
+                        }
+                    }
+                    .listStyle(.insetGrouped)
+                    .frame(minHeight: 200)
+
+                    Spacer()
+
+                    // 5) Manage Exercises
+                    NavigationLink {
+                        ExerciseListView()
+                    } label: {
+                        Label("Manage Exercises", systemImage: "list.bullet")
+                            .font(.headline)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.accentColor)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
                     .padding(.horizontal)
 
-                // 4) Scrollable list of saved exercises (min 200pt tall)
-                List {
-                    if userManager.user.exercisePool.isEmpty {
-                        Text("No saved exercises yet.")
-                            .italic()
-                            .foregroundColor(.secondary)
-                    } else {
-                        ForEach(userManager.user.exercisePool) { ex in
-                            Text(ex.name)
-                        }
-                        .onDelete(perform: deleteFromPool)
+                    // 6) Workouts
+                    NavigationLink {
+                        WorkoutView()
+                    } label: {
+                        Label("Workouts", systemImage: "figure.walk")
+                            .font(.headline)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.accentColor)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
                     }
+                    .padding(.horizontal)
                 }
-                .listStyle(.insetGrouped)
-                .frame(minHeight: 200)
-
-                Spacer()
-
-                // 5) Manage Exercises
-                NavigationLink {
-                    ExerciseListView(userManager: userManager)
-                } label: {
-                    Label("Manage Exercises", systemImage: "list.bullet")
-                        .font(.headline)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.accentColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
-                .padding(.horizontal)
-
-                // 6) Workouts
-                NavigationLink {
-                    WorkoutView()
-                } label: {
-                    Label("Workouts", systemImage: "figure.walk")
-                        .font(.headline)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.accentColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
-                .padding(.horizontal)
-            }
-            .padding()
-            .navigationTitle("Home")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack {
-                        // Force‐open registration for testing
-                        Button {
-                            isNewUser = true
-                        } label: {
-                            Image(systemName: "person.crop.circle.badge.plus")
-                        }
-                        // Settings
-                        NavigationLink(destination: SettingsView()) {
-                            Image(systemName: "gearshape")
+                .padding()
+                .navigationTitle("Home")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        HStack {
+                            // Force‐open registration for testing
+                            Button {
+                                isNewUser = true
+                            } label: {
+                                Image(systemName: "person.crop.circle.badge.plus")
+                            }
+                            // Settings
+                            NavigationLink(destination: SettingsView()) {
+                                Image(systemName: "gearshape")
+                            }
                         }
                     }
                 }
-            }
-            // 7) Registration flow
-            .fullScreenCover(isPresented: $isNewUser) {
-                NewUserView(isNewUser: $isNewUser)
-                    .interactiveDismissDisabled()
-            }
-            // 8) After sign-up, prompt goals if none set
-            .onChange(of: isNewUser) { newVal in
-                if !newVal && userManager.user.goals.isEmpty {
-                    isSettingGoals = true
+                // 7) Registration flow
+                .fullScreenCover(isPresented: $isNewUser) {
+                    NewUserView(isNewUser: $isNewUser)
+                        .interactiveDismissDisabled()
+                }
+                // 8) After sign-up, prompt goals if none set
+                .onChange(of: isNewUser) { newVal in
+                    if !newVal && userManager.user.goals.isEmpty {
+                        isSettingGoals = true
+                    }
+                }
+                .sheet(isPresented: $isSettingGoals) {
+                    UserGoalsView(isSettingGoals: $isSettingGoals)
+                        .interactiveDismissDisabled()
+                }
+                // 9) Initial load
+                .onAppear {
+                    userManager.readUser()
+                    isNewUser = userManager.user.name.isEmpty
                 }
             }
-            .sheet(isPresented: $isSettingGoals) {
-                UserGoalsView(isSettingGoals: $isSettingGoals)
-                    .interactiveDismissDisabled()
             }
-            // 9) Initial load
-            .onAppear {
-                userManager.readUser()
-                isNewUser = userManager.user.name.isEmpty
-                generateTasks()
-            }
-        }
+
     }
 
     private func deleteFromPool(at offsets: IndexSet) {
@@ -151,16 +149,7 @@ struct MainView: View {
         userManager.saveUser()
     }
     
-    private func generateTasks() {
-        var newTasks: [Task] = []
-        let exercise: Exercise = Exercise(exerciseId: "1", name: "Placeholder", gifUrl: "Test", targetMuscles: ["Test"], bodyParts: ["Test"], equipments: ["Test"], secondaryMuscles: ["Test"], instructions: ["Test"])// Placeholder
-        
-        for i in 0..<3 {
-            newTasks.append(Task(exercise: exercise, description: TaskDetails.description[i], xp: TaskDetails.xp[i], complete: false))
-        }
-        
-        userManager.updateUser(tasks: newTasks)
-    }
+    
 }
 
 struct MainView_Previews: PreviewProvider {

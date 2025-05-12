@@ -3,85 +3,75 @@
 import SwiftUI
 
 struct ExerciseListView: View {
-    @ObservedObject var userManager: UserManager
+    @EnvironmentObject var userManager: UserManager
     @State private var apiExercises: [Exercise] = []
     @State private var isLoading = false
 
     var body: some View {
-        List {
-            if !userManager.user.exercisePool.isEmpty {
-                Section("Your Exercises") {
-                    ForEach(userManager.user.exercisePool) { ex in
+        NavigationStack {
+            List {
+                // "Your Exercises" section
+                if !userManager.user.exercisePool.isEmpty {
+                    Section(header: Text("Your Exercises")) {
+                        ForEach(userManager.user.exercisePool) { ex in
+                            HStack {
+//                                AsyncImage(url: URL(string: ex.gifUrl)) { phase in
+//                                    switch phase {
+//                                    case .success(let img):
+//                                        img.resizable()
+//                                            .scaledToFill()
+//                                            .frame(width: 50, height: 50)
+//                                            .clipped()
+//                                            .cornerRadius(6)
+//                                    default:
+//                                        ProgressView()
+//                                            .frame(width: 50, height: 50)
+//                                    }
+//                                }
+                                Text(ex.name)
+                                    .font(.headline)
+                                Spacer()
+                            }
+                        }
+                        .onDelete(perform: deleteFromPool)
+                    }
+                }
+                
+                // "Discover More" section
+                Section(header: Text("Discover More")) {
+                    ForEach(apiExercises) { ex in
                         HStack {
-                            AsyncImage(url: URL(string: ex.gifUrl)) { phase in
-                                switch phase {
-                                case .success(let img):
-                                    img.resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipped()
-                                        .cornerRadius(6)
-                                default:
-                                    ProgressView()
-                                        .frame(width: 50, height: 50)
-                                }
-                            }
+//                            AsyncImage(url: URL(string: ex.gifUrl)) { phase in
+//                                switch phase {
+//                                case .success(let img):
+//                                    img.resizable()
+//                                        .scaledToFill()
+//                                        .frame(width: 50, height: 50)
+//                                        .clipped()
+//                                        .cornerRadius(6)
+//                                default:
+//                                    ProgressView()
+//                                        .frame(width: 50, height: 50)
+//                                }
+//                            }
                             Text(ex.name)
-                                .font(.headline)
+                                .font(.subheadline)
                             Spacer()
-                        }
-                    }
-                    .onDelete(perform: deleteFromPool)
-                }
-            }
-            
-            Section("Discover More") {
-                ForEach(apiExercises) { ex in
-                    HStack {
-                        AsyncImage(url: URL(string: ex.gifUrl)) { phase in
-                            switch phase {
-                            case .success(let img):
-                                img.resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipped()
-                                    .cornerRadius(6)
-                            default:
-                                ProgressView()
-                                    .frame(width: 50, height: 50)
+                            Button {
+                                addToPool(ex)
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.green)
                             }
+                            .buttonStyle(.plain)
                         }
-                        Text(ex.name)
-                            .font(.subheadline)
-                        Spacer()
-                        Button {
-                            addToPool(ex)
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(.green)
-                        }
-                        .buttonStyle(.plain)
                     }
                 }
             }
-        }
-        .listStyle(.insetGrouped)
-        .navigationTitle("Exercises")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if isLoading {
-                    ProgressView()
-                } else {
-                    Button(action: {
-                        Task {
-                            await loadExercises()
-                        }
-                    }, label: {
-                        Image(systemName: "arrow.clockwise.circle")
-                    })
-                }
-            }
+            .listStyle(.insetGrouped) // Style for the list
+            .navigationTitle("Exercises")
+            .task { await loadExercises() } // Task to load exercises
         }
     }
 
@@ -100,9 +90,13 @@ struct ExerciseListView: View {
     // MARK: - Pool management
 
     private func addToPool(_ ex: Exercise) {
+        print("Ran addToPool")
         guard !userManager.user.exercisePool.contains(ex) else { return }
+        print("Exercise not found in pool")
         userManager.user.exercisePool.append(ex)
+        print("Exercise appended to userManager")
         userManager.saveUser()
+        print("User saved!")
     }
 
     private func deleteFromPool(at offsets: IndexSet) {
@@ -111,9 +105,7 @@ struct ExerciseListView: View {
     }
 }
 
-
 #Preview {
-    NavigationStack {
-        ExerciseListView(userManager: UserManager())
-    }
+    ExerciseListView()
+        .environmentObject(UserManager())
 }

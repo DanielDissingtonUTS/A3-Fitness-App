@@ -1,9 +1,9 @@
 struct TaskDetails {
     static var description: [String] =
     [
-        "Beat your personal best in: ", // Take from PR list
-        "Complete 2 exercises targeting: ", // Take from goals (arms, back, shoulders, etc).
-        "Perform a new exercise: ", // Take from PR list
+        "Set a new PR in any exercise",
+        "Complete at least 2 exercises",
+        "Complete a full workout",
     ]
     static var xp: [Int] = [100, 75, 50]
 }
