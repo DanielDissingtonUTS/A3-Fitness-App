@@ -1,3 +1,5 @@
+https://github.com/DanielDissingtonUTS/A3-Fitness-App
+
 **FitXP**
 
 FitXP is a fitness app that helps users track their workouts, monitor progress, and stay consistent. It includes features like exercise-specific personal 
